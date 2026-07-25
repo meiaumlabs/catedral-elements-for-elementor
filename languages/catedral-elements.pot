@@ -1,0 +1,308 @@
+# Copyright (C) 2026 61 Labs
+# This file is distributed under the GPL-2.0-or-later license.
+msgid ""
+msgstr ""
+"Project-Id-Version: Catedral Elements for Elementor 1.0.0\n"
+"Report-Msgid-Bugs-To: https://61labs.com.br\n"
+"POT-Creation-Date: 2026-07-25 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
+"X-Domain: catedral-elements\n"
+
+#. Main file — admin notice.
+msgid "Catedral Elements precisa do Elementor ativo para exibir os widgets. Ative o Elementor para usar o Slide Carrossel."
+msgstr ""
+
+#. Plugin action link.
+msgid "Elementor"
+msgstr ""
+
+#. Elementor category.
+msgid "Catedral Elements"
+msgstr ""
+
+#. Widget title.
+msgid "Slide Carrossel"
+msgstr ""
+
+#. Content section labels.
+msgid "Slides"
+msgstr ""
+
+msgid "Nome (rótulo no menu)"
+msgstr ""
+
+msgid "Imagem de fundo"
+msgstr ""
+
+msgid "Foco da imagem"
+msgstr ""
+
+msgid "object-position personalizado"
+msgstr ""
+
+msgid "Título"
+msgstr ""
+
+msgid "Tag do título"
+msgstr ""
+
+msgid "Subtítulo"
+msgstr ""
+
+msgid "Conteúdo"
+msgstr ""
+
+msgid "Texto do botão (vazio = oculto)"
+msgstr ""
+
+msgid "Link do botão"
+msgstr ""
+
+msgid "Autoplay & Transição"
+msgstr ""
+
+msgid "Autoplay"
+msgstr ""
+
+msgid "Intervalo (ms)"
+msgstr ""
+
+msgid "Pausar ao passar o mouse"
+msgstr ""
+
+msgid "Pausar ao interagir"
+msgstr ""
+
+msgid "Loop infinito"
+msgstr ""
+
+msgid "Duração da transição (ms)"
+msgstr ""
+
+msgid "Easing"
+msgstr ""
+
+msgid "Scroll Horizontal"
+msgstr ""
+
+msgid "Capturar scroll do mouse"
+msgstr ""
+
+msgid "Pinar seção durante o scroll"
+msgstr ""
+
+msgid "Snap slide a slide"
+msgstr ""
+
+msgid "Sensibilidade (px)"
+msgstr ""
+
+msgid "Swipe horizontal (touch)"
+msgstr ""
+
+msgid "Menu de Navegação"
+msgstr ""
+
+msgid "Mostrar menu"
+msgstr ""
+
+msgid "Posição horizontal"
+msgstr ""
+
+msgid "Posição vertical"
+msgstr ""
+
+msgid "Deslocamento vertical"
+msgstr ""
+
+msgid "Deslocamento horizontal"
+msgstr ""
+
+msgid "Largura do Conteúdo"
+msgstr ""
+
+msgid "Modo de largura"
+msgstr ""
+
+msgid "Largura máxima (boxed)"
+msgstr ""
+
+#. Style section labels.
+msgid "Altura do Widget"
+msgstr ""
+
+msgid "Altura"
+msgstr ""
+
+msgid "Overlay"
+msgstr ""
+
+msgid "Tipo"
+msgstr ""
+
+msgid "Cor sólida"
+msgstr ""
+
+msgid "Cor inicial"
+msgstr ""
+
+msgid "Cor final"
+msgstr ""
+
+msgid "Direção"
+msgstr ""
+
+msgid "Opacidade"
+msgstr ""
+
+msgid "Cor do item ativo"
+msgstr ""
+
+msgid "Cor dos itens inativos"
+msgstr ""
+
+msgid "Cor no hover"
+msgstr ""
+
+msgid "Espaço entre itens"
+msgstr ""
+
+msgid "Transição ativo/inativo (ms)"
+msgstr ""
+
+msgid "Título do Slide"
+msgstr ""
+
+msgid "Cor"
+msgstr ""
+
+msgid "Espaço abaixo"
+msgstr ""
+
+msgid "Subtítulo do Slide"
+msgstr ""
+
+msgid "Conteúdo (Rich Text)"
+msgstr ""
+
+msgid "Botão CTA"
+msgstr ""
+
+msgid "Fundo"
+msgstr ""
+
+msgid "Cor do texto"
+msgstr ""
+
+msgid "Cor da borda"
+msgstr ""
+
+msgid "Fundo no hover"
+msgstr ""
+
+msgid "Texto no hover"
+msgstr ""
+
+msgid "Espaçamento interno"
+msgstr ""
+
+msgid "Arredondamento"
+msgstr ""
+
+msgid "Espessura da borda"
+msgstr ""
+
+msgid "Posição do Bloco de Conteúdo"
+msgstr ""
+
+msgid "Âncora horizontal"
+msgstr ""
+
+msgid "Âncora vertical"
+msgstr ""
+
+msgid "Offset horizontal"
+msgstr ""
+
+msgid "Offset vertical"
+msgstr ""
+
+msgid "Largura máxima do bloco"
+msgstr ""
+
+msgid "Alinhamento do texto"
+msgstr ""
+
+#. Choose / option labels.
+msgid "Esquerda"
+msgstr ""
+
+msgid "Direita"
+msgstr ""
+
+msgid "Centro"
+msgstr ""
+
+msgid "Topo"
+msgstr ""
+
+msgid "Meio"
+msgstr ""
+
+msgid "Base"
+msgstr ""
+
+msgid "Sim"
+msgstr ""
+
+msgid "Não"
+msgstr ""
+
+msgid "Nenhum"
+msgstr ""
+
+msgid "Sólido"
+msgstr ""
+
+msgid "Gradiente"
+msgstr ""
+
+msgid "Boxed"
+msgstr ""
+
+msgid "Full"
+msgstr ""
+
+#. Render / runtime strings.
+msgid "Navegação dos slides"
+msgstr ""
+
+msgid "Adicione ao menos um slide no painel de conteúdo."
+msgstr ""
+
+#. translators: %d: slide number
+msgid "Slide %d"
+msgstr ""
+
+#. translators: %s: slide name
+msgid "Ir para slide: %s"
+msgstr ""
+
+#. Default slide names.
+msgid "SALA"
+msgstr ""
+
+msgid "QUARTO SUÍTE"
+msgstr ""
+
+msgid "PISCINA"
+msgstr ""
+
+msgid "BICICLETÁRIO"
+msgstr ""

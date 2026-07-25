@@ -1,0 +1,393 @@
+/**
+ * Catedral Elements — Slide Carrossel (Scroll Horizontal)
+ * Estética: imobiliário de luxo, minimalismo editorial.
+ * Valores sobrescritos pelo Elementor via CSS custom properties (--cee-*).
+ */
+
+.cee-slide-carousel {
+	/* Tokens base (fallbacks — o Elementor sobrescreve via selectors). */
+	--cee-widget-height: 100vh;
+	--cee-transition-speed: 800ms;
+	--cee-easing: cubic-bezier(0.76, 0, 0.24, 1);
+
+	--cee-nav-active-color: #ffffff;
+	--cee-nav-inactive-color: rgba(255, 255, 255, 0.35);
+	--cee-nav-hover-color: rgba(255, 255, 255, 0.70);
+	--cee-nav-state-transition: 300ms;
+	--cee-nav-offset-v: 40px;
+	--cee-nav-offset-h: 40px;
+
+	--cee-content-boxed-max-width: 1140px;
+
+	position: relative;
+	width: 100%;
+	height: var(--cee-widget-height);
+	overflow: hidden;
+	background: #0d0d0d;
+	isolation: isolate;
+}
+
+.cee-slide-carousel *,
+.cee-slide-carousel *::before,
+.cee-slide-carousel *::after {
+	box-sizing: border-box;
+}
+
+/* Estado de mensagem no editor. */
+.cee-slide-carousel--empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 200px;
+	height: auto;
+	padding: 40px;
+	color: rgba(255, 255, 255, 0.7);
+	font-family: 'Raleway', 'Montserrat', sans-serif;
+	letter-spacing: 0.1em;
+	text-align: center;
+}
+
+/* ---------------------------------------------------------------------
+ * Viewport + Track
+ * ------------------------------------------------------------------- */
+
+.cee-slide-carousel__viewport {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.cee-slide-carousel__track {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	will-change: transform;
+	transform: translate3d(0, 0, 0);
+	transition: transform var(--cee-transition-speed) var(--cee-easing);
+}
+
+/* ---------------------------------------------------------------------
+ * Slide
+ * ------------------------------------------------------------------- */
+
+.cee-slide {
+	position: relative;
+	flex: 0 0 100%;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.cee-slide__media {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	overflow: hidden;
+}
+
+.cee-slide__image {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center center;
+	/* Zoom lento contínuo (Ken Burns) — desligado em reduced-motion. */
+	transform: scale(1.06);
+	transition: transform 1200ms var(--cee-easing);
+}
+
+.cee-slide--active .cee-slide__image {
+	transform: scale(1);
+	transition: transform 8000ms ease-out;
+}
+
+.cee-slide__overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	pointer-events: none;
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.40) 100%);
+}
+
+/* ---------------------------------------------------------------------
+ * Bloco de conteúdo (título, subtítulo, texto, botão)
+ * ------------------------------------------------------------------- */
+
+.cee-slide__inner {
+	position: absolute;
+	inset: 0;
+	z-index: 3;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end; /* content_block_v */
+	align-items: flex-start;   /* content_block_h */
+	padding: 48px;
+	pointer-events: none;
+}
+
+/* Modo boxed: limita o inner à largura do container e centraliza. */
+.cee-slide-carousel[data-content-width="boxed"] .cee-slide__inner {
+	max-width: var(--cee-content-boxed-max-width);
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+}
+
+.cee-slide-carousel[data-content-width="full"] .cee-slide__inner {
+	max-width: 100%;
+}
+
+.cee-slide__content {
+	position: relative;
+	max-width: 600px;
+	pointer-events: auto;
+	/* Reveal do conteúdo do slide ativo. */
+	opacity: 0;
+	transform: translateY(18px);
+	transition: opacity 700ms var(--cee-easing) 120ms,
+		transform 700ms var(--cee-easing) 120ms;
+}
+
+.cee-slide--active .cee-slide__content {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.cee-slide__title {
+	margin: 0 0 8px;
+	color: #ffffff;
+	font-family: 'Raleway', 'Montserrat', sans-serif;
+	font-weight: 200;
+	font-size: clamp(14px, 1.6vw, 22px);
+	line-height: 1.4;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	text-wrap: balance;
+}
+
+.cee-slide__subtitle {
+	margin: 0 0 16px;
+	color: rgba(255, 255, 255, 0.80);
+	font-family: 'Raleway', 'Montserrat', sans-serif;
+	font-weight: 300;
+	font-size: clamp(12px, 1vw, 16px);
+	letter-spacing: 0.05em;
+}
+
+.cee-slide__text {
+	margin: 0 0 24px;
+	color: rgba(255, 255, 255, 0.75);
+	font-family: 'Raleway', 'Montserrat', sans-serif;
+	font-weight: 300;
+	font-size: 14px;
+	line-height: 1.7;
+}
+
+.cee-slide__text > *:last-child {
+	margin-bottom: 0;
+}
+
+.cee-slide__text a {
+	color: #ffffff;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------
+ * Botão CTA
+ * ------------------------------------------------------------------- */
+
+.cee-slide__btn {
+	display: inline-block;
+	margin-top: 4px;
+	padding: 12px 28px;
+	border: 1px solid rgba(255, 255, 255, 0.70);
+	border-radius: 0;
+	background-color: transparent;
+	color: #ffffff;
+	font-family: 'Raleway', 'Montserrat', sans-serif;
+	font-weight: 300;
+	font-size: 12px;
+	letter-spacing: 0.20em;
+	text-transform: uppercase;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background-color 400ms var(--cee-easing),
+		color 400ms var(--cee-easing),
+		border-color 400ms var(--cee-easing);
+}
+
+.cee-slide__btn:hover,
+.cee-slide__btn:focus-visible {
+	background-color: rgba(255, 255, 255, 0.15);
+	color: #ffffff;
+	outline: none;
+}
+
+.cee-slide__btn:focus-visible {
+	outline: 2px solid rgba(255, 255, 255, 0.8);
+	outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------
+ * Menu de navegação vertical
+ * ------------------------------------------------------------------- */
+
+.cee-nav {
+	position: absolute;
+	z-index: 10;
+	display: flex;
+	pointer-events: none;
+}
+
+.cee-nav__list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	pointer-events: auto;
+}
+
+/* Ancoragem horizontal. */
+.cee-nav[data-nav-position-h="right"] {
+	right: var(--cee-nav-offset-h);
+	left: auto;
+	text-align: right;
+	align-items: flex-end;
+}
+
+.cee-nav[data-nav-position-h="left"] {
+	left: var(--cee-nav-offset-h);
+	right: auto;
+	text-align: left;
+	align-items: flex-start;
+}
+
+.cee-nav[data-nav-position-h="left"] .cee-nav__item {
+	text-align: left;
+}
+
+/* Ancoragem vertical. */
+.cee-nav[data-nav-position-v="top"] {
+	top: var(--cee-nav-offset-v);
+}
+
+.cee-nav[data-nav-position-v="bottom"] {
+	bottom: var(--cee-nav-offset-v);
+}
+
+.cee-nav[data-nav-position-v="middle"] {
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.cee-nav__row {
+	margin: 0;
+	padding: 0;
+	line-height: 1;
+}
+
+.cee-nav__item {
+	display: inline-block;
+	margin: 0;
+	padding: 2px 0;
+	border: 0;
+	background: transparent;
+	color: var(--cee-nav-inactive-color);
+	font-family: 'Raleway', 'Montserrat', sans-serif;
+	font-weight: 300;
+	font-size: 12px;
+	letter-spacing: 0.30em;
+	text-transform: uppercase;
+	text-align: right;
+	white-space: nowrap;
+	cursor: pointer;
+	opacity: 1;
+	transition: color var(--cee-nav-state-transition) ease,
+		opacity var(--cee-nav-state-transition) ease;
+}
+
+.cee-nav__item:hover {
+	color: var(--cee-nav-hover-color);
+}
+
+.cee-nav__item--active {
+	color: var(--cee-nav-active-color);
+}
+
+.cee-nav__item:focus-visible {
+	outline: 1px solid rgba(255, 255, 255, 0.8);
+	outline-offset: 4px;
+}
+
+/* ---------------------------------------------------------------------
+ * Estados gerenciados pelo JS
+ * ------------------------------------------------------------------- */
+
+.cee-slide-carousel--pinned {
+	cursor: ns-resize;
+}
+
+.cee-slide-carousel--animating .cee-nav__item,
+.cee-slide-carousel--animating .cee-slide__btn {
+	pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------
+ * Responsivo
+ * ------------------------------------------------------------------- */
+
+@media (max-width: 767px) {
+	.cee-slide__inner {
+		padding: 28px;
+	}
+
+	.cee-nav {
+		--cee-nav-offset-v: 24px;
+		--cee-nav-offset-h: 24px;
+	}
+
+	.cee-nav__list {
+		gap: 10px;
+	}
+
+	.cee-nav__item {
+		font-size: 10px;
+		letter-spacing: 0.22em;
+	}
+
+	.cee-slide__title {
+		letter-spacing: 0.10em;
+	}
+}
+
+/* ---------------------------------------------------------------------
+ * Reduced motion — remove todas as animações/transições
+ * ------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+	.cee-slide-carousel__track {
+		transition: none !important;
+	}
+
+	.cee-slide__image {
+		transform: none !important;
+		transition: none !important;
+	}
+
+	.cee-slide__content {
+		opacity: 1 !important;
+		transform: none !important;
+		transition: none !important;
+	}
+
+	.cee-slide__btn,
+	.cee-nav__item {
+		transition: none !important;
+	}
+}
