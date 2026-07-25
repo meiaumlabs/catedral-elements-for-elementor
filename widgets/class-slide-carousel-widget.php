@@ -654,6 +654,54 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-bg-active: {{VALUE}};' ),
 		) );
 
+		$this->add_control( 'nav_item_border_heading', array(
+			'label'     => __( 'Borda dos itens', 'catedral-elements' ),
+			'type'      => Controls_Manager::HEADING,
+			'separator' => 'before',
+		) );
+
+		$this->add_control( 'nav_item_border_width', array(
+			'label'      => __( 'Espessura da borda', 'catedral-elements' ),
+			'type'       => Controls_Manager::SLIDER,
+			'size_units' => array( 'px' ),
+			'range'      => array( 'px' => array( 'min' => 0, 'max' => 10 ) ),
+			'default'    => array( 'size' => 0, 'unit' => 'px' ),
+			'selectors'  => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-border-width: {{SIZE}}{{UNIT}};' ),
+		) );
+
+		$this->add_control( 'nav_item_border_color', array(
+			'label'     => __( 'Cor da borda (inativo)', 'catedral-elements' ),
+			'type'      => Controls_Manager::COLOR,
+			'default'   => 'transparent',
+			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-border-color: {{VALUE}};' ),
+		) );
+
+		$this->add_control( 'nav_item_border_color_hover', array(
+			'label'     => __( 'Cor da borda no hover', 'catedral-elements' ),
+			'type'      => Controls_Manager::COLOR,
+			'default'   => 'transparent',
+			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-border-color-hover: {{VALUE}};' ),
+		) );
+
+		$this->add_control( 'nav_item_border_color_active', array(
+			'label'     => __( 'Cor da borda do item ativo', 'catedral-elements' ),
+			'type'      => Controls_Manager::COLOR,
+			'default'   => 'transparent',
+			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-border-color-active: {{VALUE}};' ),
+		) );
+
+		$this->add_responsive_control( 'nav_item_text_align', array(
+			'label'     => __( 'Alinhamento do texto', 'catedral-elements' ),
+			'type'      => Controls_Manager::CHOOSE,
+			'separator' => 'before',
+			'options'   => array(
+				'left'   => array( 'title' => __( 'Esquerda', 'catedral-elements' ), 'icon' => 'eicon-text-align-left' ),
+				'center' => array( 'title' => __( 'Centro', 'catedral-elements' ), 'icon' => 'eicon-text-align-center' ),
+				'right'  => array( 'title' => __( 'Direita', 'catedral-elements' ), 'icon' => 'eicon-text-align-right' ),
+			),
+			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-text-align: {{VALUE}};' ),
+		) );
+
 		$this->add_responsive_control( 'nav_item_padding', array(
 			'label'      => __( 'Espaçamento interno dos itens', 'catedral-elements' ),
 			'type'       => Controls_Manager::DIMENSIONS,

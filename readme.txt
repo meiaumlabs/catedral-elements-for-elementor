@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,11 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.3.0 =
+* Correção: no modo pin, ao passar da seção o autoplay não puxa mais o usuário de volta. O tick do autoplay recalcula a posição real (via `getBoundingClientRect`) antes de rolar e, por segurança, nunca rola para trás da posição atual — respeitando onde o usuário está.
+* Novo: controle de alinhamento do texto dos itens do menu (esquerda, centro, direita), responsivo.
+* Novo: controles de borda dos itens do menu — espessura e cor por estado (inativo, hover e ativo), com transição suave.
 
 = 1.2.1 =
 * Correção: o menu de navegação não herda mais cores do tema/página. As cores (item, hover, ativo) e o fundo passam a vir exclusivamente dos controles do widget, com blindagem de especificidade que vence regras de tema aplicadas a `button`. Reset do "chrome" nativo do botão (appearance, sombra, borda).

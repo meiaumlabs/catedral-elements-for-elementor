@@ -177,7 +177,8 @@
 	 *
 	 * @param {number} index Índice do slide alvo.
 	 */
-	Carousel.prototype.scrollToIndex = function ( index ) {
+	Carousel.prototype.scrollToIndex = function ( index, opts ) {
+		opts = opts || {};
 		var pin = this.pinEl || this.root;
 		var scrollable = this.root.offsetHeight - pin.offsetHeight;
 		if ( scrollable <= 0 ) {
@@ -188,6 +189,12 @@
 		var frac = last > 0 ? index / last : 0;
 		var sectionTop = window.pageYOffset + this.root.getBoundingClientRect().top;
 		var target = Math.round( sectionTop + frac * scrollable );
+		// forwardOnly (autoplay): nunca puxar o usuário pra trás. Se o alvo está
+		// na posição atual ou acima dela, o usuário já passou desse ponto —
+		// não rola, para respeitar a posição atual dele.
+		if ( opts.forwardOnly && target <= window.pageYOffset ) {
+			return;
+		}
 		window.scrollTo( { top: target, behavior: REDUCED_MOTION ? 'auto' : 'smooth' } );
 	};
 
@@ -401,12 +408,19 @@
 			}
 			if ( self.pinMode ) {
 				// No pin, o autoplay caminha pelos slides rolando a página.
+				// Recalcula a posição REAL antes de decidir: o tick do
+				// setInterval pode disparar com progress/currentIndex defasados
+				// (updatePin é throttled por rAF). Agir sobre valores velhos faz
+				// o window.scrollTo puxar o usuário de volta pra dentro da seção
+				// depois que ele já rolou pra fora. updatePin lê a posição via
+				// getBoundingClientRect (sempre atual).
+				self.updatePin();
 				// Ao chegar no fim, para e deixa a página seguir naturalmente.
 				if ( self.progress >= 0.999 || self.currentIndex >= self.slides.length - 1 ) {
 					self.stopAutoplay();
 					return;
 				}
-				self.scrollToIndex( self.currentIndex + 1 );
+				self.scrollToIndex( self.currentIndex + 1, { forwardOnly: true } );
 			} else {
 				self.goToSlide( self.currentIndex + 1, { source: 'autoplay' } );
 			}
