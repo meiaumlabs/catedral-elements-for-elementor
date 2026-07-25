@@ -335,10 +335,11 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		) );
 
 		$this->add_control( 'scroll_pin', array(
-			'label'        => __( 'Pinar seção durante o scroll', 'catedral-elements' ),
+			'label'        => __( 'Travar seção (pin) durante o scroll', 'catedral-elements' ),
 			'type'         => Controls_Manager::SWITCHER,
 			'return_value' => 'yes',
 			'default'      => 'yes',
+			'description'  => __( 'Ao chegar na seção, ela encaixa e trava na tela; a rolagem vertical passa a avançar os slides na horizontal. Só depois de percorrer todos os slides a página segue para a próxima seção.', 'catedral-elements' ),
 			'condition'    => array( 'scroll_enable' => 'yes' ),
 		) );
 
@@ -350,24 +351,23 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'condition'    => array( 'scroll_enable' => 'yes' ),
 		) );
 
-		$this->add_control( 'scroll_release_vertical', array(
-			'label'        => __( 'Continuar rolagem vertical ao fim', 'catedral-elements' ),
-			'type'         => Controls_Manager::SWITCHER,
-			'label_on'     => __( 'Sim', 'catedral-elements' ),
-			'label_off'    => __( 'Não', 'catedral-elements' ),
-			'return_value' => 'yes',
-			'default'      => 'yes',
-			'description'  => __( 'Depois de percorrer todos os slides na horizontal, libera o scroll da página e continua a descida vertical. Ao subir de volta, o widget recaptura os slides.', 'catedral-elements' ),
-			'condition'    => array( 'scroll_enable' => 'yes' ),
+		$this->add_control( 'scroll_pin_length', array(
+			'label'       => __( 'Distância de rolagem por slide', 'catedral-elements' ),
+			'type'        => Controls_Manager::SLIDER,
+			'range'       => array( '' => array( 'min' => 0.5, 'max' => 3, 'step' => 0.1 ) ),
+			'default'     => array( 'size' => 1, 'unit' => '' ),
+			'description' => __( 'Multiplicador da altura do widget por slide. Maior = mais rolagem, os slides passam mais devagar e há mais tempo de leitura.', 'catedral-elements' ),
+			'condition'   => array( 'scroll_enable' => 'yes', 'scroll_pin' => 'yes' ),
 		) );
 
 		$this->add_control( 'scroll_sensitivity', array(
-			'label'      => __( 'Sensibilidade (px)', 'catedral-elements' ),
-			'type'       => Controls_Manager::SLIDER,
-			'size_units' => array( 'px' ),
-			'range'      => array( 'px' => array( 'min' => 50, 'max' => 500, 'step' => 10 ) ),
-			'default'    => array( 'size' => 150, 'unit' => 'px' ),
-			'condition'  => array( 'scroll_enable' => 'yes' ),
+			'label'       => __( 'Sensibilidade (px) — modo slider', 'catedral-elements' ),
+			'type'        => Controls_Manager::SLIDER,
+			'size_units'  => array( 'px' ),
+			'range'       => array( 'px' => array( 'min' => 50, 'max' => 500, 'step' => 10 ) ),
+			'default'     => array( 'size' => 150, 'unit' => 'px' ),
+			'description' => __( 'Usada apenas quando o pin está desligado.', 'catedral-elements' ),
+			'condition'   => array( 'scroll_enable' => 'yes', 'scroll_pin!' => 'yes' ),
 		) );
 
 		$this->add_control( 'scroll_touch', array(
@@ -1044,9 +1044,17 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		$scroll_enable   = 'yes' === ( $settings['scroll_enable'] ?? 'yes' );
 		$scroll_pin      = 'yes' === ( $settings['scroll_pin'] ?? 'yes' );
 		$scroll_snap     = 'yes' === ( $settings['scroll_snap'] ?? 'yes' );
-		$scroll_release  = 'yes' === ( $settings['scroll_release_vertical'] ?? 'yes' );
 		$sensitivity     = isset( $settings['scroll_sensitivity']['size'] ) ? (int) $settings['scroll_sensitivity']['size'] : 150;
 		$scroll_touch    = 'yes' === ( $settings['scroll_touch'] ?? 'yes' );
+
+		$count      = count( $slides );
+		$pin_factor = isset( $settings['scroll_pin_length']['size'] ) ? (float) $settings['scroll_pin_length']['size'] : 1.0;
+		if ( $pin_factor <= 0 ) {
+			$pin_factor = 1.0;
+		}
+		// Comprimento total do wrapper (múltiplo da altura do widget): 1 viewport
+		// fixa + (N-1) trechos de rolagem, um por transição entre slides.
+		$pin_len = 1 + max( 0, $count - 1 ) * $pin_factor;
 		$nav_enable      = 'yes' === ( $settings['nav_enable'] ?? 'yes' );
 		$nav_orientation = in_array( $settings['nav_orientation'] ?? 'vertical', array( 'vertical', 'horizontal', 'vertical-text' ), true ) ? $settings['nav_orientation'] : 'vertical';
 		$nav_pos_h       = in_array( $settings['nav_position_h'] ?? 'right', array( 'left', 'right' ), true ) ? $settings['nav_position_h'] : 'right';
@@ -1055,9 +1063,10 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		$overlay_type    = $settings['overlay_type'] ?? 'gradient';
 
 		$root_style = sprintf(
-			'--cee-transition-speed:%dms;--cee-easing:%s;',
+			'--cee-transition-speed:%dms;--cee-easing:%s;--cee-track-length:%s;',
 			$speed,
-			esc_attr( $easing )
+			esc_attr( $easing ),
+			esc_attr( rtrim( rtrim( number_format( $pin_len, 3, '.', '' ), '0' ), '.' ) )
 		);
 
 		$root_classes = 'cee-slide-carousel';
@@ -1075,47 +1084,49 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			data-transition-speed="<?php echo esc_attr( $speed ); ?>"
 			data-transition-easing="<?php echo esc_attr( $easing ); ?>"
 			data-scroll-enable="<?php echo esc_attr( $scroll_enable ? 'true' : 'false' ); ?>"
-			data-scroll-pin="<?php echo esc_attr( $scroll_pin ? 'true' : 'false' ); ?>"
+			data-scroll-pin-enabled="<?php echo esc_attr( ( $scroll_enable && $scroll_pin ) ? 'true' : 'false' ); ?>"
 			data-scroll-snap="<?php echo esc_attr( $scroll_snap ? 'true' : 'false' ); ?>"
-			data-scroll-release="<?php echo esc_attr( $scroll_release ? 'true' : 'false' ); ?>"
 			data-scroll-sensitivity="<?php echo esc_attr( $sensitivity ); ?>"
 			data-scroll-touch="<?php echo esc_attr( $scroll_touch ? 'true' : 'false' ); ?>"
-			data-slides-count="<?php echo esc_attr( count( $slides ) ); ?>"
+			data-slides-count="<?php echo esc_attr( $count ); ?>"
 			data-content-width="<?php echo esc_attr( $content_width ); ?>"
+			data-scroll-mode="slider"
 			data-current-index="0">
 
-			<div class="cee-slide-carousel__viewport">
-				<div class="cee-slide-carousel__track">
-					<?php foreach ( $slides as $index => $slide ) : ?>
-						<?php $this->render_slide( $slide, $index, $overlay_type ); ?>
-					<?php endforeach; ?>
-				</div>
-			</div>
-
-			<?php if ( $nav_enable ) : ?>
-				<nav class="cee-nav" aria-label="<?php echo esc_attr__( 'Navegação dos slides', 'catedral-elements' ); ?>"
-					data-nav-position-h="<?php echo esc_attr( $nav_pos_h ); ?>"
-					data-nav-position-v="<?php echo esc_attr( $nav_pos_v ); ?>"
-					data-nav-orientation="<?php echo esc_attr( $nav_orientation ); ?>">
-					<ul class="cee-nav__list">
+			<div class="cee-slide-carousel__pin">
+				<div class="cee-slide-carousel__viewport">
+					<div class="cee-slide-carousel__track">
 						<?php foreach ( $slides as $index => $slide ) : ?>
-							<?php
-							$name      = isset( $slide['slide_name'] ) && '' !== $slide['slide_name'] ? $slide['slide_name'] : sprintf( /* translators: %d: slide number */ __( 'Slide %d', 'catedral-elements' ), $index + 1 );
-							$is_active = 0 === $index;
-							?>
-							<li class="cee-nav__row">
-								<button type="button"
-									class="cee-nav__item<?php echo $is_active ? ' cee-nav__item--active' : ''; ?>"
-									data-slide-index="<?php echo esc_attr( $index ); ?>"
-									aria-current="<?php echo esc_attr( $is_active ? 'true' : 'false' ); ?>"
-									aria-label="<?php echo esc_attr( sprintf( /* translators: %s: slide name */ __( 'Ir para slide: %s', 'catedral-elements' ), $name ) ); ?>">
-									<?php echo esc_html( $name ); ?>
-								</button>
-							</li>
+							<?php $this->render_slide( $slide, $index, $overlay_type ); ?>
 						<?php endforeach; ?>
-					</ul>
-				</nav>
-			<?php endif; ?>
+					</div>
+				</div>
+
+				<?php if ( $nav_enable ) : ?>
+					<nav class="cee-nav" aria-label="<?php echo esc_attr__( 'Navegação dos slides', 'catedral-elements' ); ?>"
+						data-nav-position-h="<?php echo esc_attr( $nav_pos_h ); ?>"
+						data-nav-position-v="<?php echo esc_attr( $nav_pos_v ); ?>"
+						data-nav-orientation="<?php echo esc_attr( $nav_orientation ); ?>">
+						<ul class="cee-nav__list">
+							<?php foreach ( $slides as $index => $slide ) : ?>
+								<?php
+								$name      = isset( $slide['slide_name'] ) && '' !== $slide['slide_name'] ? $slide['slide_name'] : sprintf( /* translators: %d: slide number */ __( 'Slide %d', 'catedral-elements' ), $index + 1 );
+								$is_active = 0 === $index;
+								?>
+								<li class="cee-nav__row">
+									<button type="button"
+										class="cee-nav__item<?php echo $is_active ? ' cee-nav__item--active' : ''; ?>"
+										data-slide-index="<?php echo esc_attr( $index ); ?>"
+										aria-current="<?php echo esc_attr( $is_active ? 'true' : 'false' ); ?>"
+										aria-label="<?php echo esc_attr( sprintf( /* translators: %s: slide name */ __( 'Ir para slide: %s', 'catedral-elements' ), $name ) ); ?>">
+										<?php echo esc_html( $name ); ?>
+									</button>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					</nav>
+				<?php endif; ?>
+			</div>
 		</div>
 		<?php
 	}

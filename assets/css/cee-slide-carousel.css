@@ -21,13 +21,43 @@
 	--cee-nav-offset-h: 40px;
 
 	--cee-content-boxed-max-width: 1140px;
+	--cee-track-length: 1;
 
 	position: relative;
 	width: 100%;
+	isolation: isolate;
+}
+
+/* Modo slider (padrão / sem pin): seção ocupa uma tela e recorta os slides. */
+.cee-slide-carousel[data-scroll-mode="slider"] {
 	height: var(--cee-widget-height);
 	overflow: hidden;
 	background: #0d0d0d;
-	isolation: isolate;
+}
+
+/* Modo pin: wrapper alto (N × altura) cujo miolo fica sticky no topo enquanto
+   a rolagem vertical avança os slides na horizontal. Ao esgotar os slides, o
+   wrapper termina e a página segue naturalmente para a próxima seção. */
+.cee-slide-carousel[data-scroll-mode="pin"] {
+	height: calc(var(--cee-widget-height) * var(--cee-track-length));
+	overflow: visible;
+	background: transparent;
+}
+
+/* Miolo pinável (contém viewport + menu). */
+.cee-slide-carousel__pin {
+	position: absolute;
+	inset: 0;
+	overflow: hidden;
+	background: #0d0d0d;
+}
+
+.cee-slide-carousel[data-scroll-mode="pin"] .cee-slide-carousel__pin {
+	position: sticky;
+	inset: auto;
+	top: 0;
+	width: 100%;
+	height: var(--cee-widget-height);
 }
 
 .cee-slide-carousel *,
@@ -356,10 +386,6 @@
 /* ---------------------------------------------------------------------
  * Estados gerenciados pelo JS
  * ------------------------------------------------------------------- */
-
-.cee-slide-carousel--pinned {
-	cursor: ns-resize;
-}
 
 .cee-slide-carousel--animating .cee-nav__item,
 .cee-slide-carousel--animating .cee-slide__btn {
