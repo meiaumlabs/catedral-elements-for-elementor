@@ -39,6 +39,7 @@
 			scrollEnable: d.scrollEnable === 'true',
 			scrollPin: d.scrollPin === 'true',
 			scrollSnap: d.scrollSnap === 'true',
+			scrollRelease: d.scrollRelease !== 'false',
 			sensitivity: parseInt( d.scrollSensitivity, 10 ) || 150,
 			scrollTouch: d.scrollTouch === 'true',
 			count: parseInt( d.slidesCount, 10 ) || this.slides.length
@@ -374,8 +375,10 @@
 		var delta = e.deltaY;
 		var dir = delta > 0 ? 1 : -1;
 
-		// Sem loop: no limite, libera o scroll da página.
-		if ( ! this.cfg.loop ) {
+		// Continuação vertical: ao percorrer todos os slides, libera o scroll da
+		// página nos limites. Prevalece sobre o loop (que segue valendo só para o
+		// autoplay). Sem release, cai no comportamento antigo de limite sem loop.
+		if ( this.cfg.scrollRelease || ! this.cfg.loop ) {
 			if ( dir > 0 && this.isAtEnd() ) {
 				this.unpin();
 				return;

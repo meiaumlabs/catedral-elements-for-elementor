@@ -350,6 +350,17 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'condition'    => array( 'scroll_enable' => 'yes' ),
 		) );
 
+		$this->add_control( 'scroll_release_vertical', array(
+			'label'        => __( 'Continuar rolagem vertical ao fim', 'catedral-elements' ),
+			'type'         => Controls_Manager::SWITCHER,
+			'label_on'     => __( 'Sim', 'catedral-elements' ),
+			'label_off'    => __( 'Não', 'catedral-elements' ),
+			'return_value' => 'yes',
+			'default'      => 'yes',
+			'description'  => __( 'Depois de percorrer todos os slides na horizontal, libera o scroll da página e continua a descida vertical. Ao subir de volta, o widget recaptura os slides.', 'catedral-elements' ),
+			'condition'    => array( 'scroll_enable' => 'yes' ),
+		) );
+
 		$this->add_control( 'scroll_sensitivity', array(
 			'label'      => __( 'Sensibilidade (px)', 'catedral-elements' ),
 			'type'       => Controls_Manager::SLIDER,
@@ -384,6 +395,19 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'type'         => Controls_Manager::SWITCHER,
 			'return_value' => 'yes',
 			'default'      => 'yes',
+		) );
+
+		$this->add_control( 'nav_orientation', array(
+			'label'     => __( 'Orientação do texto', 'catedral-elements' ),
+			'type'      => Controls_Manager::SELECT,
+			'default'   => 'vertical',
+			'options'   => array(
+				'vertical'      => __( 'Empilhado — texto horizontal', 'catedral-elements' ),
+				'horizontal'    => __( 'Em linha — texto horizontal', 'catedral-elements' ),
+				'vertical-text' => __( 'Em linha — texto vertical (girado)', 'catedral-elements' ),
+			),
+			'description' => __( 'Define como os rótulos do menu são dispostos e a orientação do texto.', 'catedral-elements' ),
+			'condition' => array( 'nav_enable' => 'yes' ),
 		) );
 
 		$this->add_control( 'nav_position_h', array(
@@ -601,6 +625,50 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'type'      => Controls_Manager::COLOR,
 			'default'   => 'rgba(255,255,255,0.70)',
 			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-hover-color: {{VALUE}};' ),
+		) );
+
+		$this->add_control( 'nav_item_bg_heading', array(
+			'label'     => __( 'Fundo dos itens', 'catedral-elements' ),
+			'type'      => Controls_Manager::HEADING,
+			'separator' => 'before',
+		) );
+
+		$this->add_control( 'nav_item_bg', array(
+			'label'     => __( 'Fundo (inativo)', 'catedral-elements' ),
+			'type'      => Controls_Manager::COLOR,
+			'default'   => 'transparent',
+			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-bg: {{VALUE}};' ),
+		) );
+
+		$this->add_control( 'nav_item_bg_hover', array(
+			'label'     => __( 'Fundo no hover', 'catedral-elements' ),
+			'type'      => Controls_Manager::COLOR,
+			'default'   => 'transparent',
+			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-bg-hover: {{VALUE}};' ),
+		) );
+
+		$this->add_control( 'nav_item_bg_active', array(
+			'label'     => __( 'Fundo do item ativo', 'catedral-elements' ),
+			'type'      => Controls_Manager::COLOR,
+			'default'   => 'transparent',
+			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-bg-active: {{VALUE}};' ),
+		) );
+
+		$this->add_responsive_control( 'nav_item_padding', array(
+			'label'      => __( 'Espaçamento interno dos itens', 'catedral-elements' ),
+			'type'       => Controls_Manager::DIMENSIONS,
+			'size_units' => array( 'px', 'em' ),
+			'default'    => array( 'top' => 2, 'right' => 0, 'bottom' => 2, 'left' => 0, 'unit' => 'px', 'isLinked' => false ),
+			'selectors'  => array( '{{WRAPPER}} .cee-nav__item' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ),
+		) );
+
+		$this->add_control( 'nav_item_radius', array(
+			'label'      => __( 'Arredondamento dos itens', 'catedral-elements' ),
+			'type'       => Controls_Manager::SLIDER,
+			'size_units' => array( 'px', '%' ),
+			'range'      => array( 'px' => array( 'min' => 0, 'max' => 40 ), '%' => array( 'min' => 0, 'max' => 50 ) ),
+			'default'    => array( 'size' => 0, 'unit' => 'px' ),
+			'selectors'  => array( '{{WRAPPER}} .cee-nav__item' => 'border-radius: {{SIZE}}{{UNIT}};' ),
 		) );
 
 		$this->add_group_control( Group_Control_Typography::get_type(), array(
@@ -976,9 +1044,11 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		$scroll_enable   = 'yes' === ( $settings['scroll_enable'] ?? 'yes' );
 		$scroll_pin      = 'yes' === ( $settings['scroll_pin'] ?? 'yes' );
 		$scroll_snap     = 'yes' === ( $settings['scroll_snap'] ?? 'yes' );
+		$scroll_release  = 'yes' === ( $settings['scroll_release_vertical'] ?? 'yes' );
 		$sensitivity     = isset( $settings['scroll_sensitivity']['size'] ) ? (int) $settings['scroll_sensitivity']['size'] : 150;
 		$scroll_touch    = 'yes' === ( $settings['scroll_touch'] ?? 'yes' );
 		$nav_enable      = 'yes' === ( $settings['nav_enable'] ?? 'yes' );
+		$nav_orientation = in_array( $settings['nav_orientation'] ?? 'vertical', array( 'vertical', 'horizontal', 'vertical-text' ), true ) ? $settings['nav_orientation'] : 'vertical';
 		$nav_pos_h       = in_array( $settings['nav_position_h'] ?? 'right', array( 'left', 'right' ), true ) ? $settings['nav_position_h'] : 'right';
 		$nav_pos_v       = in_array( $settings['nav_position_v'] ?? 'top', array( 'top', 'middle', 'bottom' ), true ) ? $settings['nav_position_v'] : 'top';
 		$content_width   = 'full' === ( $settings['content_width_mode'] ?? 'boxed' ) ? 'full' : 'boxed';
@@ -1007,6 +1077,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			data-scroll-enable="<?php echo esc_attr( $scroll_enable ? 'true' : 'false' ); ?>"
 			data-scroll-pin="<?php echo esc_attr( $scroll_pin ? 'true' : 'false' ); ?>"
 			data-scroll-snap="<?php echo esc_attr( $scroll_snap ? 'true' : 'false' ); ?>"
+			data-scroll-release="<?php echo esc_attr( $scroll_release ? 'true' : 'false' ); ?>"
 			data-scroll-sensitivity="<?php echo esc_attr( $sensitivity ); ?>"
 			data-scroll-touch="<?php echo esc_attr( $scroll_touch ? 'true' : 'false' ); ?>"
 			data-slides-count="<?php echo esc_attr( count( $slides ) ); ?>"
@@ -1024,7 +1095,8 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			<?php if ( $nav_enable ) : ?>
 				<nav class="cee-nav" aria-label="<?php echo esc_attr__( 'Navegação dos slides', 'catedral-elements' ); ?>"
 					data-nav-position-h="<?php echo esc_attr( $nav_pos_h ); ?>"
-					data-nav-position-v="<?php echo esc_attr( $nav_pos_v ); ?>">
+					data-nav-position-v="<?php echo esc_attr( $nav_pos_v ); ?>"
+					data-nav-orientation="<?php echo esc_attr( $nav_orientation ); ?>">
 					<ul class="cee-nav__list">
 						<?php foreach ( $slides as $index => $slide ) : ?>
 							<?php

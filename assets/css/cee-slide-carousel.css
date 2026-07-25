@@ -13,6 +13,9 @@
 	--cee-nav-active-color: #ffffff;
 	--cee-nav-inactive-color: rgba(255, 255, 255, 0.35);
 	--cee-nav-hover-color: rgba(255, 255, 255, 0.70);
+	--cee-nav-item-bg: transparent;
+	--cee-nav-item-bg-hover: transparent;
+	--cee-nav-item-bg-active: transparent;
 	--cee-nav-state-transition: 300ms;
 	--cee-nav-offset-v: 40px;
 	--cee-nav-offset-h: 40px;
@@ -297,7 +300,7 @@
 	margin: 0;
 	padding: 2px 0;
 	border: 0;
-	background: transparent;
+	background: var(--cee-nav-item-bg);
 	color: var(--cee-nav-inactive-color);
 	font-family: 'Raleway', 'Montserrat', sans-serif;
 	font-weight: 300;
@@ -309,20 +312,45 @@
 	cursor: pointer;
 	opacity: 1;
 	transition: color var(--cee-nav-state-transition) ease,
+		background-color var(--cee-nav-state-transition) ease,
 		opacity var(--cee-nav-state-transition) ease;
 }
 
 .cee-nav__item:hover {
 	color: var(--cee-nav-hover-color);
+	background: var(--cee-nav-item-bg-hover);
 }
 
 .cee-nav__item--active {
 	color: var(--cee-nav-active-color);
+	background: var(--cee-nav-item-bg-active);
 }
 
 .cee-nav__item:focus-visible {
 	outline: 1px solid rgba(255, 255, 255, 0.8);
 	outline-offset: 4px;
+}
+
+/* Orientação do menu / do texto (nav_orientation). */
+.cee-nav[data-nav-orientation="vertical"] .cee-nav__list {
+	flex-direction: column;
+}
+
+.cee-nav[data-nav-orientation="horizontal"] .cee-nav__list {
+	flex-direction: row;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.cee-nav[data-nav-orientation="vertical-text"] .cee-nav__list {
+	flex-direction: row;
+	align-items: flex-start;
+}
+
+.cee-nav[data-nav-orientation="vertical-text"] .cee-nav__item {
+	writing-mode: vertical-rl;
+	text-orientation: mixed;
+	text-align: left;
 }
 
 /* ---------------------------------------------------------------------

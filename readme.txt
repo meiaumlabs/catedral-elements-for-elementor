@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,11 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.1.0 =
+* Novo: ao terminar os slides no scroll horizontal, a seção libera o pin e continua a rolagem vertical da página (controle "Continuar rolagem vertical ao fim", em Scroll Horizontal). Ao subir de volta, o widget recaptura os slides. Passa a funcionar mesmo com o loop do autoplay ligado.
+* Novo: controle de orientação do texto do menu de navegação — empilhado (horizontal), em linha (horizontal) ou em linha com texto vertical girado.
+* Novo: controles de fundo dos itens do menu (inativo, hover e ativo), além de espaçamento interno e arredondamento.
 
 = 1.0.1 =
 * Correção: `get_title()` do widget deixa de injetar HTML/estilo inline no painel do Elementor, que desconfigurava os campos nativos (deixava-os maiores). O título volta a ser texto puro conforme o contrato do Elementor.
