@@ -25,7 +25,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 	}
 
 	public function get_title() {
-		return __( 'Slide Carrossel', 'catedral-elements' ) . ' <span style="color:#10b981;font-weight:600;">61labs.com.br</span>';
+		return __( 'Slide Carrossel', 'catedral-elements' );
 	}
 
 	public function get_icon() {

@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,9 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.0.1 =
+* Correção: `get_title()` do widget deixa de injetar HTML/estilo inline no painel do Elementor, que desconfigurava os campos nativos (deixava-os maiores). O título volta a ser texto puro conforme o contrato do Elementor.
 
 = 1.0.0 =
 * Lançamento inicial com o widget Slide Carrossel — Scroll Horizontal.
