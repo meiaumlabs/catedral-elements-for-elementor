@@ -361,6 +361,33 @@
 	outline-offset: 4px;
 }
 
+/* Blindagem contra herança do tema/página: cor, fundo e o "chrome" nativo do
+   botão vêm EXCLUSIVAMENTE dos controles do widget (via variáveis --cee-nav-*),
+   nunca do tema. A especificidade elevada (0-3-0) vence regras de tema em
+   `button` (ex.: `.elementor button`, `.entry-content button`). Como as cores
+   passam por variáveis alimentadas pelos controles do Elementor, esta regra
+   não engessa a edição — os controles continuam mandando. */
+.cee-slide-carousel .cee-nav .cee-nav__item {
+	-webkit-appearance: none;
+	appearance: none;
+	border: 0;
+	box-shadow: none;
+	text-shadow: none;
+	text-decoration: none;
+	background: var(--cee-nav-item-bg);
+	color: var(--cee-nav-inactive-color);
+}
+
+.cee-slide-carousel .cee-nav .cee-nav__item:hover {
+	background: var(--cee-nav-item-bg-hover);
+	color: var(--cee-nav-hover-color);
+}
+
+.cee-slide-carousel .cee-nav .cee-nav__item--active {
+	background: var(--cee-nav-item-bg-active);
+	color: var(--cee-nav-active-color);
+}
+
 /* Orientação do menu / do texto (nav_orientation). */
 .cee-nav[data-nav-orientation="vertical"] .cee-nav__list {
 	flex-direction: column;

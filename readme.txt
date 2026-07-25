@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,9 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.2.1 =
+* Correção: o menu de navegação não herda mais cores do tema/página. As cores (item, hover, ativo) e o fundo passam a vir exclusivamente dos controles do widget, com blindagem de especificidade que vence regras de tema aplicadas a `button`. Reset do "chrome" nativo do botão (appearance, sombra, borda).
 
 = 1.2.0 =
 * Reescrita do scroll horizontal para o padrão **pin sticky**: ao chegar na seção, ela encaixa e trava na tela; a rolagem vertical da página passa a avançar os slides na horizontal e, só depois de percorrer todos, a página segue para a próxima seção. Fim do travamento do scroll global (`overflow:hidden`) — agora é scroll nativo, sem sequestrar a roda do mouse, com barra de rolagem normal e reversão suave ao subir.
