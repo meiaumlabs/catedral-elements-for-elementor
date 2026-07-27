@@ -536,6 +536,54 @@
 }
 
 /* ---------------------------------------------------------------------
+ * SKIN · Editorial (Full Screen)
+ * Preset imobiliário de tela cheia (skin="editorial"): menu vertical no
+ * topo-esquerda com itens em caixa alta e espaçados (ativo em destaque,
+ * demais esmaecidos), título ancorado na base-esquerda, scrim superior
+ * para legibilidade do menu e ocupação full screen (altura padrão 100vh).
+ * Os controles do widget seguem ajustando cor, tipografia, offsets e
+ * demais detalhes por cima do preset. Ao voltar para "padrao", o menu
+ * obedece novamente o controle "Posição do menu".
+ * ------------------------------------------------------------------- */
+
+/* Menu no topo-esquerda (assinatura do preset). Especificidade 0-4-0
+   (classe .cee-nav repetida) para vencer o default do controle "Posição
+   do menu". O deslocamento vem dos controles de offset H/V, então o menu
+   continua ajustável em px por dispositivo. */
+.cee-slide-carousel.cee-skin-editorial .cee-nav.cee-nav {
+	top: var(--cee-nav-offset-v, 40px);
+	right: auto;
+	bottom: auto;
+	left: var(--cee-nav-offset-h, 40px);
+	transform: none;
+	align-items: flex-start;
+	justify-content: flex-start;
+	width: auto;
+	padding: 0;
+}
+
+/* Itens à esquerda e esmaecimento editorial dos inativos, via variáveis —
+   os controles de cor/alinhamento do menu continuam sobrescrevendo. */
+.cee-slide-carousel.cee-skin-editorial {
+	--cee-nav-item-text-align: left;
+	--cee-nav-inactive-color: rgba(255, 255, 255, 0.42);
+	--cee-nav-hover-color: rgba(255, 255, 255, 0.72);
+	--cee-nav-active-color: #ffffff;
+}
+
+/* Scrim superior sutil: garante a legibilidade do menu no topo sobre fotos
+   claras. Aditivo — não interfere nos controles de overlay/scrim inferior. */
+.cee-slide-carousel.cee-skin-editorial .cee-slide__media::after {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto 0;
+	height: 32%;
+	z-index: 2;
+	pointer-events: none;
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+/* ---------------------------------------------------------------------
  * Reduced motion — remove todas as animações/transições
  * ------------------------------------------------------------------- */
 

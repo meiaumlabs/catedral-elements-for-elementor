@@ -56,6 +56,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 
 	protected function register_controls() {
 		// CONTENT.
+		$this->section_skin();
 		$this->section_slides();
 		$this->section_autoplay();
 		$this->section_scroll();
@@ -74,6 +75,30 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		$this->style_content();
 		$this->style_button();
 		$this->style_content_block();
+	}
+
+	/* ---------------------------------------------------------------------
+	 * CONTENT · Estilo (Skin)
+	 * ------------------------------------------------------------------- */
+
+	protected function section_skin() {
+		$this->start_controls_section( 'sec_skin', array(
+			'label' => __( 'Estilo', 'catedral-elements' ),
+			'tab'   => Controls_Manager::TAB_CONTENT,
+		) );
+
+		$this->add_control( 'skin', array(
+			'label'       => __( 'Estilo do widget', 'catedral-elements' ),
+			'type'        => Controls_Manager::SELECT,
+			'default'     => 'padrao',
+			'options'     => array(
+				'padrao'    => __( 'Padrão', 'catedral-elements' ),
+				'editorial' => __( 'Editorial · Full Screen', 'catedral-elements' ),
+			),
+			'description' => __( 'O estilo "Editorial · Full Screen" adota o layout imobiliário de tela cheia: menu vertical no topo-esquerda com itens em caixa alta e espaçados (ativo em destaque, demais esmaecidos), título ancorado na base e scrim de legibilidade. Os controles de cor, tipografia, offsets e demais ajustes continuam funcionando por cima do preset.', 'catedral-elements' ),
+		) );
+
+		$this->end_controls_section();
 	}
 
 	/* ---------------------------------------------------------------------
@@ -1376,12 +1401,15 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			esc_attr( rtrim( rtrim( number_format( $pin_len, 3, '.', '' ), '0' ), '.' ) )
 		);
 
-		$root_classes = 'cee-slide-carousel';
+		$skin = in_array( $settings['skin'] ?? 'padrao', array( 'padrao', 'editorial' ), true ) ? $settings['skin'] : 'padrao';
+
+		$root_classes = 'cee-slide-carousel cee-skin-' . $skin;
 		if ( $autoplay ) {
 			$root_classes .= ' cee-slide-carousel--autoplay';
 		}
 		?>
 		<div class="<?php echo esc_attr( $root_classes ); ?>"
+			data-skin="<?php echo esc_attr( $skin ); ?>"
 			style="<?php echo esc_attr( $root_style ); ?>"
 			data-autoplay="<?php echo esc_attr( $autoplay ? 'true' : 'false' ); ?>"
 			data-autoplay-interval="<?php echo esc_attr( $interval ); ?>"

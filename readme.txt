@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.10.0
+Stable tag: 1.11.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,9 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.11.0 =
+* Novo: seletor "Estilo do widget" (em Conteúdo) com o preset **Editorial · Full Screen**. Ao selecionar, o widget adota o layout imobiliário de tela cheia: menu vertical no topo-esquerda com itens em caixa alta e espaçados (ativo em destaque, demais esmaecidos), título ancorado na base e um scrim superior sutil para legibilidade do menu sobre fotos claras. Todos os controles (cor, tipografia, offsets, tamanho, etc.) continuam ajustando o resultado por cima do preset; voltar para "Padrão" restaura o comportamento do controle "Posição do menu".
 
 = 1.10.0 =
 * Novo: controle "Efeito de sobreposição" (em Autoplay & Transição) para ligar/desligar a transição empilhada. Ligado (padrão): o próximo slide entra acima do anterior com fade in up + deslize horizontal. Desligado: volta ao deslize horizontal clássico, com os slides passando lado a lado.
