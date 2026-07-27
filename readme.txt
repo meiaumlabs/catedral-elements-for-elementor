@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.9.0
+Stable tag: 1.10.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,9 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.10.0 =
+* Novo: controle "Efeito de sobreposição" (em Autoplay & Transição) para ligar/desligar a transição empilhada. Ligado (padrão): o próximo slide entra acima do anterior com fade in up + deslize horizontal. Desligado: volta ao deslize horizontal clássico, com os slides passando lado a lado.
 
 = 1.9.0 =
 * Novo: transição dos slides por sobreposição — em vez de deslizar o conjunto, os slides ficam empilhados e o próximo entra ACIMA do anterior com fade in up + deslize horizontal, resultando numa troca mais suave e sofisticada. No modo pin (scroll travado) a sobreposição é dirigida pelo scroll de forma contínua; no modo slider é uma transição CSS. Respeita `prefers-reduced-motion` (troca instantânea).

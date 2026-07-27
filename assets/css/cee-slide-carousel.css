@@ -97,9 +97,7 @@
 	overflow: hidden;
 }
 
-/* Container de empilhamento: os slides ficam sobrepostos no mesmo lugar e a
-   transição acontece por opacidade/deslocamento de cada slide (não mais por
-   translação do track). Assim o próximo entra ACIMA do anterior. */
+/* Base do track. O layout muda conforme o efeito de transição escolhido. */
 .cee-slide-carousel__track {
 	position: absolute;
 	inset: 0;
@@ -107,16 +105,29 @@
 	height: 100%;
 }
 
+/* Modo clássico (deslize horizontal): track em linha que translada em bloco. */
+.cee-slide-carousel[data-transition-overlap="false"] .cee-slide-carousel__track {
+	display: flex;
+	will-change: transform;
+	transform: translate3d(0, 0, 0);
+	transition: transform var(--cee-transition-speed) var(--cee-easing);
+}
+
 /* ---------------------------------------------------------------------
- * Slide (empilhado: fade in up + sobreposição horizontal)
+ * Slide
  * ------------------------------------------------------------------- */
 
 .cee-slide {
-	position: absolute;
-	inset: 0;
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
+}
+
+/* Sobreposição (padrão): slides empilhados no mesmo lugar; o próximo entra
+   ACIMA do anterior com fade in up + deslize horizontal. */
+.cee-slide-carousel[data-transition-overlap="true"] .cee-slide {
+	position: absolute;
+	inset: 0;
 	z-index: 1;
 	opacity: 0;
 	transform: translate3d(var(--cee-ov-x, 6%), var(--cee-ov-y, 26px), 0);
@@ -125,11 +136,16 @@
 		transform var(--cee-transition-speed) var(--cee-easing);
 }
 
-/* Slide ativo: assenta no lugar e sobe para o topo da pilha. */
-.cee-slide--active {
+.cee-slide-carousel[data-transition-overlap="true"] .cee-slide--active {
 	opacity: 1;
 	transform: translate3d(0, 0, 0);
 	z-index: 3;
+}
+
+/* Clássico (deslize): slides lado a lado dentro do track em linha. */
+.cee-slide-carousel[data-transition-overlap="false"] .cee-slide {
+	position: relative;
+	flex: 0 0 100%;
 }
 
 .cee-slide__media {

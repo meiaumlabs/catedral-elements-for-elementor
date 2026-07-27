@@ -56,6 +56,7 @@
 			scrollPin: d.scrollPinEnabled === 'true',
 			scrollPinMobile: d.scrollPinMobile === 'true',
 			scrollTouch: d.scrollTouch === 'true',
+			overlap: d.transitionOverlap !== 'false',
 			count: parseInt( d.slidesCount, 10 ) || this.slides.length
 		};
 
@@ -86,11 +87,13 @@
 		if ( this.pinMode ) {
 			root.dataset.scrollMode = 'pin';
 			this.track.style.transition = 'none';
-			// No pin o empilhamento é dirigido quadro a quadro pelo scroll —
-			// desliga a transição CSS de cada slide para não haver atraso.
-			this.slides.forEach( function ( s ) {
-				s.style.transition = 'none';
-			} );
+			// No pin com sobreposição o empilhamento é dirigido quadro a quadro
+			// pelo scroll — desliga a transição CSS de cada slide para não atrasar.
+			if ( this.cfg.overlap ) {
+				this.slides.forEach( function ( s ) {
+					s.style.transition = 'none';
+				} );
+			}
 		} else {
 			root.dataset.scrollMode = 'slider';
 		}
@@ -186,7 +189,11 @@
 		this.progress = progress;
 
 		var pos = progress * last;
-		this.renderStack( Math.floor( pos ), pos - Math.floor( pos ) );
+		if ( this.cfg.overlap ) {
+			this.renderStack( Math.floor( pos ), pos - Math.floor( pos ) );
+		} else {
+			this.track.style.transform = 'translate3d(' + ( -pos * 100 ) + '%, 0, 0)';
+		}
 
 		this.setActive( Math.round( pos ) );
 	};
@@ -320,16 +327,30 @@
 		this.currentIndex = index;
 		this.root.dataset.currentIndex = String( index );
 
-		// A entrada empilhada (fade in up + sobreposição) vem do CSS via a classe
-		// .cee-slide--active. Na carga inicial suprime a animação do primeiro slide.
-		if ( opts.immediate ) {
-			var active = this.slides[ index ];
-			if ( active ) {
-				var prevT = active.style.transition;
-				active.style.transition = 'none';
-				active.classList.add( 'cee-slide--active' );
-				void active.offsetWidth;
-				active.style.transition = prevT;
+		if ( this.cfg.overlap ) {
+			// Entrada empilhada (fade in up + sobreposição) via CSS pela classe
+			// .cee-slide--active. Na carga inicial suprime a animação do 1º slide.
+			if ( opts.immediate ) {
+				var active = this.slides[ index ];
+				if ( active ) {
+					var prevT = active.style.transition;
+					active.style.transition = 'none';
+					active.classList.add( 'cee-slide--active' );
+					void active.offsetWidth;
+					active.style.transition = prevT;
+				}
+			}
+		} else {
+			// Deslize horizontal clássico: translada o track.
+			var offset = -100 * index;
+			if ( opts.immediate || REDUCED_MOTION ) {
+				var prev = this.track.style.transition;
+				this.track.style.transition = 'none';
+				this.track.style.transform = 'translate3d(' + offset + '%, 0, 0)';
+				void this.track.offsetWidth;
+				this.track.style.transition = prev;
+			} else {
+				this.track.style.transform = 'translate3d(' + offset + '%, 0, 0)';
 			}
 		}
 

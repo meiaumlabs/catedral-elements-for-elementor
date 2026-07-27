@@ -319,6 +319,16 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			),
 		) );
 
+		$this->add_control( 'transition_overlap', array(
+			'label'        => __( 'Efeito de sobreposição', 'catedral-elements' ),
+			'type'         => Controls_Manager::SWITCHER,
+			'label_on'     => __( 'Sim', 'catedral-elements' ),
+			'label_off'    => __( 'Não', 'catedral-elements' ),
+			'return_value' => 'yes',
+			'default'      => 'yes',
+			'description'  => __( 'Ligado (padrão): o próximo slide entra ACIMA do anterior com fade in up + deslize horizontal (transição empilhada e suave). Desligado: deslize horizontal clássico, com os slides passando lado a lado.', 'catedral-elements' ),
+		) );
+
 		$this->end_controls_section();
 	}
 
@@ -1337,6 +1347,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		$loop            = 'yes' === ( $settings['loop'] ?? 'yes' );
 		$speed           = isset( $settings['transition_speed']['size'] ) ? (int) $settings['transition_speed']['size'] : 800;
 		$easing          = $this->easing_css( $settings['transition_easing'] ?? 'premium' );
+		$overlap         = 'yes' === ( $settings['transition_overlap'] ?? 'yes' );
 		$scroll_enable   = 'yes' === ( $settings['scroll_enable'] ?? 'yes' );
 		$scroll_pin      = 'yes' === ( $settings['scroll_pin'] ?? 'yes' );
 		$scroll_snap       = 'yes' === ( $settings['scroll_snap'] ?? 'yes' );
@@ -1379,6 +1390,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			data-loop="<?php echo esc_attr( $loop ? 'true' : 'false' ); ?>"
 			data-transition-speed="<?php echo esc_attr( $speed ); ?>"
 			data-transition-easing="<?php echo esc_attr( $easing ); ?>"
+			data-transition-overlap="<?php echo esc_attr( $overlap ? 'true' : 'false' ); ?>"
 			data-scroll-enable="<?php echo esc_attr( $scroll_enable ? 'true' : 'false' ); ?>"
 			data-scroll-pin-enabled="<?php echo esc_attr( ( $scroll_enable && $scroll_pin ) ? 'true' : 'false' ); ?>"
 			data-scroll-snap="<?php echo esc_attr( $scroll_snap ? 'true' : 'false' ); ?>"
