@@ -792,6 +792,18 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'selectors' => array( '{{WRAPPER}} .cee-slide__title' => 'color: {{VALUE}};' ),
 		) );
 
+		$this->add_responsive_control( 'title_text_align', array(
+			'label'       => __( 'Alinhamento', 'catedral-elements' ),
+			'type'        => Controls_Manager::CHOOSE,
+			'options'     => array(
+				'left'   => array( 'title' => __( 'Esquerda', 'catedral-elements' ), 'icon' => 'eicon-text-align-left' ),
+				'center' => array( 'title' => __( 'Centro', 'catedral-elements' ), 'icon' => 'eicon-text-align-center' ),
+				'right'  => array( 'title' => __( 'Direita', 'catedral-elements' ), 'icon' => 'eicon-text-align-right' ),
+			),
+			'description' => __( 'Alinhamento do título por dispositivo (independente do bloco). Deixe vazio para herdar o alinhamento do conteúdo.', 'catedral-elements' ),
+			'selectors'   => array( '{{WRAPPER}} .cee-slide__title' => 'text-align: {{VALUE}};' ),
+		) );
+
 		$this->add_group_control( Group_Control_Typography::get_type(), array(
 			'name'           => 'title_typo',
 			'selector'       => '{{WRAPPER}} .cee-slide__title',

@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,9 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.5.0 =
+* Novo: controle de alinhamento do título do slide, responsivo por dispositivo — alinhe o título de forma independente do restante do conteúdo (ex.: centralizado no mobile). Somado à tipografia e ao espaçamento (que já eram responsivos), o título passa a ter ajuste e posicionamento completos por dispositivo.
 
 = 1.4.0 =
 * Novo: melhor experiência no mobile. Controle "Manter pin/trava no mobile" (em Scroll Horizontal) — desligado por padrão, telas pequenas passam a ser um carrossel navegado por swipe em vez de sequestrar a rolagem vertical; ligado, mantém o pin também no mobile.
