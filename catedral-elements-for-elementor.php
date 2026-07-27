@@ -3,7 +3,7 @@
  * Plugin Name:       Catedral Elements for Elementor
  * Plugin URI:        https://61labs.com.br/catedral-elements
  * Description:       Addon de widgets premium para o Elementor desenvolvido pela 61 Labs. Primeiro widget: Slide Carrossel com Scroll Horizontal para apresentações imobiliárias de alto padrão.
- * Version:           1.3.0
+ * Version:           1.4.0
  * Requires at least: 5.9
  * Requires PHP:      7.4
  * Author:            61 Labs
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CEE_VERSION', '1.3.0' );
+define( 'CEE_VERSION', '1.4.0' );
 define( 'CEE_FILE', __FILE__ );
 define( 'CEE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CEE_URL', plugin_dir_url( __FILE__ ) );

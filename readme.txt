@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,8 +19,10 @@ Recursos:
 * Repetidor de slides com nome, imagem, foco da imagem, título, subtítulo, conteúdo rich-text e botão CTA.
 * Scroll horizontal com pin da seção, snap slide a slide e sensibilidade configurável.
 * Autoplay com pausa ao hover e ao interagir, loop opcional e easing premium.
-* Menu de navegação sincronizado (posição e offsets configuráveis).
+* Menu de navegação sincronizado com posição (horizontal e vertical) responsiva por dispositivo e offsets configuráveis.
+* Âncora do bloco de conteúdo (horizontal e vertical) responsiva por dispositivo.
 * Modo boxed/full para o bloco de conteúdo.
+* Experiência mobile dedicada: swipe em vez de scroll-jack por padrão (opcional) e tipografia fluida.
 * Swipe horizontal em touch e navegação por teclado.
 * Respeita `prefers-reduced-motion`.
 * Compatível com Elementor 3.x (não exige Elementor Pro).
@@ -33,6 +35,12 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.4.0 =
+* Novo: melhor experiência no mobile. Controle "Manter pin/trava no mobile" (em Scroll Horizontal) — desligado por padrão, telas pequenas passam a ser um carrossel navegado por swipe em vez de sequestrar a rolagem vertical; ligado, mantém o pin também no mobile.
+* Novo: posição do menu de navegação (horizontal e vertical) agora é responsiva — configure ancoragem diferente para desktop, tablet e mobile.
+* Novo: âncora do bloco de conteúdo (horizontal e vertical) agora é responsiva por dispositivo.
+* Melhoria: estilo mobile refinado — tipografia fluida do título/subtítulo/texto, mais respiro no bloco de conteúdo, alvos de toque maiores no menu e escala intermediária para tablet.
 
 = 1.3.0 =
 * Correção: no modo pin, ao passar da seção o autoplay não puxa mais o usuário de volta. O tick do autoplay recalcula a posição real (via `getBoundingClientRect`) antes de rolar e, por segurança, nunca rola para trás da posição atual — respeitando onde o usuário está.

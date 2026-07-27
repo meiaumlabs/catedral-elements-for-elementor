@@ -19,6 +19,9 @@
 
 	var REDUCED_MOTION = window.matchMedia && window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
 
+	// Breakpoint mobile (alinhado ao @media max-width:767px da folha de estilo).
+	var MOBILE_BREAKPOINT = 768;
+
 	function clamp( v, min, max ) {
 		return Math.max( min, Math.min( max, v ) );
 	}
@@ -51,6 +54,7 @@
 			easing: d.transitionEasing || 'cubic-bezier(0.76, 0, 0.24, 1)',
 			scrollEnable: d.scrollEnable === 'true',
 			scrollPin: d.scrollPinEnabled === 'true',
+			scrollPinMobile: d.scrollPinMobile === 'true',
 			scrollTouch: d.scrollTouch === 'true',
 			count: parseInt( d.slidesCount, 10 ) || this.slides.length
 		};
@@ -69,8 +73,14 @@
 		// usa o modo slider na edição e reserva o pin para o preview/site.
 		var isEditor = !! ( window.elementorFrontend && window.elementorFrontend.isEditMode && window.elementorFrontend.isEditMode() );
 
+		// Em telas pequenas o scroll-jack do pin costuma ser desconfortável ao
+		// toque. Por padrão (scrollPinMobile off) o mobile cai para o modo slider
+		// navegado por swipe; o pin só vale no mobile se o usuário optar por ele.
+		var isSmallScreen = window.innerWidth <= MOBILE_BREAKPOINT;
+		var pinAllowedHere = ! isSmallScreen || this.cfg.scrollPinMobile;
+
 		// Decide o modo. Pin exige scroll + pin ligados, movimento permitido e >1 slide.
-		this.pinMode = this.cfg.scrollEnable && this.cfg.scrollPin && ! REDUCED_MOTION && this.slides.length > 1 && ! isEditor;
+		this.pinMode = this.cfg.scrollEnable && this.cfg.scrollPin && ! REDUCED_MOTION && this.slides.length > 1 && ! isEditor && pinAllowedHere;
 
 		if ( this.pinMode ) {
 			root.dataset.scrollMode = 'pin';

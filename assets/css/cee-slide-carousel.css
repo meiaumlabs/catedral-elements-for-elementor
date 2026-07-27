@@ -279,6 +279,12 @@
 	z-index: 10;
 	display: flex;
 	pointer-events: none;
+	/* Fallback de ancoragem (topo-direita). A posição real vem dos controles
+	   responsivos nav_position_h/nav_position_v via CSS gerado pelo Elementor,
+	   que tem especificidade maior e sobrescreve estes valores por dispositivo. */
+	top: var(--cee-nav-offset-v);
+	right: var(--cee-nav-offset-h);
+	align-items: flex-end;
 }
 
 .cee-nav__list {
@@ -289,39 +295,6 @@
 	flex-direction: column;
 	gap: 14px;
 	pointer-events: auto;
-}
-
-/* Ancoragem horizontal. */
-.cee-nav[data-nav-position-h="right"] {
-	right: var(--cee-nav-offset-h);
-	left: auto;
-	text-align: right;
-	align-items: flex-end;
-}
-
-.cee-nav[data-nav-position-h="left"] {
-	left: var(--cee-nav-offset-h);
-	right: auto;
-	text-align: left;
-	align-items: flex-start;
-}
-
-.cee-nav[data-nav-position-h="left"] {
-	--cee-nav-item-text-align: left;
-}
-
-/* Ancoragem vertical. */
-.cee-nav[data-nav-position-v="top"] {
-	top: var(--cee-nav-offset-v);
-}
-
-.cee-nav[data-nav-position-v="bottom"] {
-	bottom: var(--cee-nav-offset-v);
-}
-
-.cee-nav[data-nav-position-v="middle"] {
-	top: 50%;
-	transform: translateY(-50%);
 }
 
 .cee-nav__row {
@@ -437,27 +410,66 @@
  * Responsivo
  * ------------------------------------------------------------------- */
 
+/* Tablet: escala intermediária de respiro e tipografia. */
+@media (max-width: 1024px) {
+	.cee-slide__inner {
+		padding: 40px;
+	}
+
+	.cee-slide__content {
+		max-width: 90%;
+	}
+}
+
+/* Mobile: exibição confortável — texto fluido, mais respiro e alvos de toque
+   maiores no menu. As posições H/V continuam controláveis por dispositivo. */
 @media (max-width: 767px) {
 	.cee-slide__inner {
-		padding: 28px;
+		padding: 24px;
+	}
+
+	.cee-slide__content {
+		max-width: 100%;
 	}
 
 	.cee-nav {
-		--cee-nav-offset-v: 24px;
-		--cee-nav-offset-h: 24px;
+		--cee-nav-offset-v: 20px;
+		--cee-nav-offset-h: 20px;
 	}
 
 	.cee-nav__list {
-		gap: 10px;
+		gap: 8px;
 	}
 
+	/* Alvos de toque maiores e legíveis. */
 	.cee-nav__item {
-		font-size: 10px;
-		letter-spacing: 0.22em;
+		font-size: 11px;
+		letter-spacing: 0.18em;
+		padding: 8px 2px;
+	}
+
+	/* Menu em linha: permite quebra e centraliza para não estourar a largura. */
+	.cee-nav[data-nav-orientation="horizontal"] .cee-nav__list {
+		justify-content: center;
 	}
 
 	.cee-slide__title {
-		letter-spacing: 0.10em;
+		font-size: clamp(16px, 5.2vw, 24px);
+		letter-spacing: 0.08em;
+		line-height: 1.35;
+	}
+
+	.cee-slide__subtitle {
+		font-size: clamp(12px, 3.6vw, 15px);
+	}
+
+	.cee-slide__text {
+		font-size: 14px;
+		line-height: 1.6;
+	}
+
+	.cee-slide__btn {
+		padding: 12px 24px;
 	}
 }
 
