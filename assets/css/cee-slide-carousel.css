@@ -16,10 +16,6 @@
 	--cee-nav-item-bg: transparent;
 	--cee-nav-item-bg-hover: transparent;
 	--cee-nav-item-bg-active: transparent;
-	--cee-nav-item-border-width: 0px;
-	--cee-nav-item-border-color: transparent;
-	--cee-nav-item-border-color-hover: transparent;
-	--cee-nav-item-border-color-active: transparent;
 	--cee-nav-item-text-align: right;
 	--cee-nav-state-transition: 300ms;
 	--cee-nav-offset-v: 40px;
@@ -204,6 +200,7 @@
 	letter-spacing: 0.15em;
 	text-transform: uppercase;
 	text-wrap: balance;
+	transform: translate(var(--cee-title-x, 0), var(--cee-title-y, 0));
 }
 
 .cee-slide__subtitle {
@@ -349,27 +346,21 @@
 .cee-slide-carousel .cee-nav .cee-nav__item {
 	-webkit-appearance: none;
 	appearance: none;
-	box-shadow: none;
 	text-shadow: none;
 	text-decoration: none;
 	background: var(--cee-nav-item-bg);
 	color: var(--cee-nav-inactive-color);
-	border-width: var(--cee-nav-item-border-width);
-	border-style: solid;
-	border-color: var(--cee-nav-item-border-color);
 	text-align: var(--cee-nav-item-text-align);
 }
 
 .cee-slide-carousel .cee-nav .cee-nav__item:hover {
 	background: var(--cee-nav-item-bg-hover);
 	color: var(--cee-nav-hover-color);
-	border-color: var(--cee-nav-item-border-color-hover);
 }
 
 .cee-slide-carousel .cee-nav .cee-nav__item--active {
 	background: var(--cee-nav-item-bg-active);
 	color: var(--cee-nav-active-color);
-	border-color: var(--cee-nav-item-border-color-active);
 }
 
 /* Orientação do menu / do texto (nav_orientation). */

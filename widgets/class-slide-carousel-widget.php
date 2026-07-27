@@ -16,6 +16,8 @@ use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Repeater;
 use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Box_Shadow;
 use Elementor\Utils;
 
 class CEE_Slide_Carousel_Widget extends Widget_Base {
@@ -65,6 +67,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		$this->style_overlay();
 		$this->style_nav();
 		$this->style_title();
+		$this->style_title_position();
 		$this->style_subtitle();
 		$this->style_content();
 		$this->style_button();
@@ -677,40 +680,65 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		) );
 
 		$this->add_control( 'nav_item_border_heading', array(
-			'label'     => __( 'Borda dos itens', 'catedral-elements' ),
+			'label'     => __( 'Borda e sombra dos itens', 'catedral-elements' ),
 			'type'      => Controls_Manager::HEADING,
 			'separator' => 'before',
 		) );
 
-		$this->add_control( 'nav_item_border_width', array(
-			'label'      => __( 'Espessura da borda', 'catedral-elements' ),
-			'type'       => Controls_Manager::SLIDER,
-			'size_units' => array( 'px' ),
-			'range'      => array( 'px' => array( 'min' => 0, 'max' => 10 ) ),
-			'default'    => array( 'size' => 0, 'unit' => 'px' ),
-			'selectors'  => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-border-width: {{SIZE}}{{UNIT}};' ),
+		$this->start_controls_tabs( 'nav_item_border_tabs' );
+
+		/* Normal. */
+		$this->start_controls_tab( 'nav_item_border_tab_normal', array(
+			'label' => __( 'Normal', 'catedral-elements' ),
 		) );
 
-		$this->add_control( 'nav_item_border_color', array(
-			'label'     => __( 'Cor da borda (inativo)', 'catedral-elements' ),
-			'type'      => Controls_Manager::COLOR,
-			'default'   => 'transparent',
-			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-border-color: {{VALUE}};' ),
+		$this->add_group_control( Group_Control_Border::get_type(), array(
+			'name'     => 'nav_item_border',
+			'selector' => '{{WRAPPER}} .cee-nav .cee-nav__item',
 		) );
 
-		$this->add_control( 'nav_item_border_color_hover', array(
-			'label'     => __( 'Cor da borda no hover', 'catedral-elements' ),
-			'type'      => Controls_Manager::COLOR,
-			'default'   => 'transparent',
-			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-border-color-hover: {{VALUE}};' ),
+		$this->add_group_control( Group_Control_Box_Shadow::get_type(), array(
+			'name'     => 'nav_item_box_shadow',
+			'selector' => '{{WRAPPER}} .cee-nav .cee-nav__item',
 		) );
 
-		$this->add_control( 'nav_item_border_color_active', array(
-			'label'     => __( 'Cor da borda do item ativo', 'catedral-elements' ),
-			'type'      => Controls_Manager::COLOR,
-			'default'   => 'transparent',
-			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-item-border-color-active: {{VALUE}};' ),
+		$this->end_controls_tab();
+
+		/* Hover. */
+		$this->start_controls_tab( 'nav_item_border_tab_hover', array(
+			'label' => __( 'Hover', 'catedral-elements' ),
 		) );
+
+		$this->add_group_control( Group_Control_Border::get_type(), array(
+			'name'     => 'nav_item_border_hover',
+			'selector' => '{{WRAPPER}} .cee-nav .cee-nav__item:hover, {{WRAPPER}} .cee-nav .cee-nav__item:focus-visible',
+		) );
+
+		$this->add_group_control( Group_Control_Box_Shadow::get_type(), array(
+			'name'     => 'nav_item_box_shadow_hover',
+			'selector' => '{{WRAPPER}} .cee-nav .cee-nav__item:hover, {{WRAPPER}} .cee-nav .cee-nav__item:focus-visible',
+		) );
+
+		$this->end_controls_tab();
+
+		/* Ativo. */
+		$this->start_controls_tab( 'nav_item_border_tab_active', array(
+			'label' => __( 'Ativo', 'catedral-elements' ),
+		) );
+
+		$this->add_group_control( Group_Control_Border::get_type(), array(
+			'name'     => 'nav_item_border_active',
+			'selector' => '{{WRAPPER}} .cee-nav .cee-nav__item--active',
+		) );
+
+		$this->add_group_control( Group_Control_Box_Shadow::get_type(), array(
+			'name'     => 'nav_item_box_shadow_active',
+			'selector' => '{{WRAPPER}} .cee-nav .cee-nav__item--active',
+		) );
+
+		$this->end_controls_tab();
+
+		$this->end_controls_tabs();
 
 		$this->add_responsive_control( 'nav_item_text_align', array(
 			'label'     => __( 'Alinhamento do texto', 'catedral-elements' ),
@@ -732,13 +760,11 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'selectors'  => array( '{{WRAPPER}} .cee-nav__item' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ),
 		) );
 
-		$this->add_control( 'nav_item_radius', array(
-			'label'      => __( 'Arredondamento dos itens', 'catedral-elements' ),
-			'type'       => Controls_Manager::SLIDER,
+		$this->add_responsive_control( 'nav_item_radius', array(
+			'label'      => __( 'Raio da borda', 'catedral-elements' ),
+			'type'       => Controls_Manager::DIMENSIONS,
 			'size_units' => array( 'px', '%' ),
-			'range'      => array( 'px' => array( 'min' => 0, 'max' => 40 ), '%' => array( 'min' => 0, 'max' => 50 ) ),
-			'default'    => array( 'size' => 0, 'unit' => 'px' ),
-			'selectors'  => array( '{{WRAPPER}} .cee-nav__item' => 'border-radius: {{SIZE}}{{UNIT}};' ),
+			'selectors'  => array( '{{WRAPPER}} .cee-nav__item' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};' ),
 		) );
 
 		$this->add_group_control( Group_Control_Typography::get_type(), array(
@@ -825,6 +851,72 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'range'      => array( 'px' => array( 'min' => 0, 'max' => 60 ) ),
 			'default'    => array( 'size' => 8, 'unit' => 'px' ),
 			'selectors'  => array( '{{WRAPPER}} .cee-slide__title' => 'margin-bottom: {{SIZE}}{{UNIT}};' ),
+		) );
+
+		$this->end_controls_section();
+	}
+
+	/* ---------------------------------------------------------------------
+	 * STYLE · Posição do Título
+	 * ------------------------------------------------------------------- */
+
+	protected function style_title_position() {
+		$this->start_controls_section( 'style_title_position', array(
+			'label' => __( 'Posição do Título', 'catedral-elements' ),
+			'tab'   => Controls_Manager::TAB_STYLE,
+		) );
+
+		$this->add_control( 'title_position_hint', array(
+			'type'            => Controls_Manager::RAW_HTML,
+			'raw'             => __( 'Vertical do título sobre o carrossel (em cima / meio / em baixo): use "Âncora vertical" na seção <strong>Posição do Bloco de Conteúdo</strong> — já responsiva por dispositivo. Abaixo você faz o posicionamento horizontal e o ajuste fino (X/Y) do título em cada tela.', 'catedral-elements' ),
+			'content_classes' => 'elementor-descriptor',
+		) );
+
+		$this->add_responsive_control( 'title_h_pos', array(
+			'label'                => __( 'Posição horizontal do título', 'catedral-elements' ),
+			'type'                 => Controls_Manager::CHOOSE,
+			'options'              => array(
+				'left'   => array( 'title' => __( 'Esquerda', 'catedral-elements' ), 'icon' => 'eicon-h-align-left' ),
+				'center' => array( 'title' => __( 'Centro', 'catedral-elements' ), 'icon' => 'eicon-h-align-center' ),
+				'right'  => array( 'title' => __( 'Direita', 'catedral-elements' ), 'icon' => 'eicon-h-align-right' ),
+			),
+			'description'          => __( 'Posiciona a caixa do título dentro do bloco, independente do subtítulo/texto. Deixe vazio para largura total.', 'catedral-elements' ),
+			'selectors_dictionary' => array(
+				'left'   => 'margin-left:0;margin-right:auto;',
+				'center' => 'margin-left:auto;margin-right:auto;',
+				'right'  => 'margin-left:auto;margin-right:0;',
+			),
+			'selectors'            => array(
+				'{{WRAPPER}} .cee-slide__title' => 'width:-webkit-fit-content;width:fit-content;max-width:100%;{{VALUE}}',
+			),
+		) );
+
+		$this->add_responsive_control( 'title_offset_x', array(
+			'label'       => __( 'Ajuste fino horizontal (X)', 'catedral-elements' ),
+			'type'        => Controls_Manager::SLIDER,
+			'size_units'  => array( 'px', '%', 'vw' ),
+			'range'       => array(
+				'px' => array( 'min' => -400, 'max' => 400 ),
+				'%'  => array( 'min' => -100, 'max' => 100 ),
+				'vw' => array( 'min' => -50, 'max' => 50 ),
+			),
+			'default'     => array( 'size' => 0, 'unit' => 'px' ),
+			'description' => __( 'Move o título na horizontal (aceita valores negativos). Ajuste por dispositivo.', 'catedral-elements' ),
+			'selectors'   => array( '{{WRAPPER}} .cee-slide__title' => '--cee-title-x: {{SIZE}}{{UNIT}};' ),
+		) );
+
+		$this->add_responsive_control( 'title_offset_y', array(
+			'label'       => __( 'Ajuste fino vertical (Y)', 'catedral-elements' ),
+			'type'        => Controls_Manager::SLIDER,
+			'size_units'  => array( 'px', '%', 'vh' ),
+			'range'       => array(
+				'px' => array( 'min' => -400, 'max' => 400 ),
+				'%'  => array( 'min' => -100, 'max' => 100 ),
+				'vh' => array( 'min' => -50, 'max' => 50 ),
+			),
+			'default'     => array( 'size' => 0, 'unit' => 'px' ),
+			'description' => __( 'Move o título na vertical (aceita valores negativos). Ajuste por dispositivo.', 'catedral-elements' ),
+			'selectors'   => array( '{{WRAPPER}} .cee-slide__title' => '--cee-title-y: {{SIZE}}{{UNIT}};' ),
 		) );
 
 		$this->end_controls_section();
