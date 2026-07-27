@@ -68,6 +68,7 @@
 		this.resumeTimer = null;
 		this.lockTimer = null;
 		this._raf = 0;
+		this.pinOffset = 0;
 
 		// Dentro do editor Elementor o wrapper alto sticky atrapalha o canvas —
 		// usa o modo slider na edição e reserva o pin para o preview/site.
@@ -160,6 +161,16 @@
 	 * ============================================================== */
 
 	/**
+	 * Lê o offset de ancoragem (top do sticky) resolvido pelo CSS. Como a variável
+	 * --cee-pin-offset é responsiva, basta reler no init e no resize.
+	 */
+	Carousel.prototype.measurePin = function () {
+		var pin = this.pinEl || this.root;
+		var t = parseFloat( window.getComputedStyle( pin ).top );
+		this.pinOffset = isNaN( t ) ? 0 : t;
+	};
+
+	/**
 	 * Atualiza a translação horizontal a partir do progresso do scroll vertical.
 	 * progress 0 → primeiro slide; progress 1 → último slide.
 	 */
@@ -172,7 +183,9 @@
 		var progress = 0;
 		if ( scrollable > 0 ) {
 			var rect = this.root.getBoundingClientRect();
-			progress = clamp( ( 0 - rect.top ) / scrollable, 0, 1 );
+			// A seção começa a travar quando o topo chega em pinOffset; o progresso
+			// avança até que o wrapper termine (scrollable percorrido).
+			progress = clamp( ( this.pinOffset - rect.top ) / scrollable, 0, 1 );
 		}
 		this.progress = progress;
 
@@ -198,7 +211,7 @@
 		index = clamp( index, 0, last );
 		var frac = last > 0 ? index / last : 0;
 		var sectionTop = window.pageYOffset + this.root.getBoundingClientRect().top;
-		var target = Math.round( sectionTop + frac * scrollable );
+		var target = Math.round( sectionTop + frac * scrollable - this.pinOffset );
 		// forwardOnly (autoplay): nunca puxar o usuário pra trás. Se o alvo está
 		// na posição atual ou acima dela, o usuário já passou desse ponto —
 		// não rola, para respeitar a posição atual dele.
@@ -211,6 +224,8 @@
 	Carousel.prototype.bindPin = function () {
 		var self = this;
 
+		this.measurePin();
+
 		this._onScroll = function () {
 			if ( self._raf ) {
 				return;
@@ -220,8 +235,13 @@
 				self.updatePin();
 			} );
 		};
+		// O offset (top do sticky) pode mudar por breakpoint — remede no resize.
+		this._onResize = function () {
+			self.measurePin();
+			self._onScroll();
+		};
 		window.addEventListener( 'scroll', this._onScroll, { passive: true } );
-		window.addEventListener( 'resize', this._onScroll );
+		window.addEventListener( 'resize', this._onResize );
 
 		// Menu → rola até o slide.
 		this.navItems.forEach( function ( btn ) {
@@ -523,7 +543,9 @@
 		}
 		if ( this._onScroll ) {
 			window.removeEventListener( 'scroll', this._onScroll );
-			window.removeEventListener( 'resize', this._onScroll );
+		}
+		if ( this._onResize ) {
+			window.removeEventListener( 'resize', this._onResize );
 		}
 		if ( this._onUserScroll ) {
 			window.removeEventListener( 'wheel', this._onUserScroll );

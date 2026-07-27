@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.7.0
+Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,10 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.8.0 =
+* Novo: controle "Ancoragem no topo ao travar (offset)" no Scroll Horizontal — define a que distância do topo da tela a seção encaixa ao travar (pin), responsivo por dispositivo. Ideal para deixar espaço a um cabeçalho fixo. A altura útil do slide e o motor de progresso do scroll se ajustam automaticamente ao offset.
+* Melhoria (mobile): posicionamento do menu de navegação mais fluido — o deslocamento H/V passa a ter valores próprios para tablet e mobile (aplicados pelo Elementor com a especificidade correta, sem serem sobrepostos pelos valores de desktop), espaçamento e tipografia dos itens escalam com a largura da tela e o menu em linha rola na horizontal em vez de quebrar/estourar a largura.
 
 = 1.7.0 =
 * Correção (mobile): o scroll da tela voltou a funcionar sobre o slide. O swipe agora trava a direção do gesto uma única vez (com limiar), então um toque que começa levemente na diagonal não sequestra mais a rolagem vertical da página — gestos verticais nunca são bloqueados.

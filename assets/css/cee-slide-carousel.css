@@ -7,6 +7,7 @@
 .cee-slide-carousel {
 	/* Tokens base (fallbacks — o Elementor sobrescreve via selectors). */
 	--cee-widget-height: 100vh;
+	--cee-pin-offset: 0px;
 	--cee-transition-speed: 800ms;
 	--cee-easing: cubic-bezier(0.76, 0, 0.24, 1);
 
@@ -56,9 +57,9 @@
 .cee-slide-carousel[data-scroll-mode="pin"] .cee-slide-carousel__pin {
 	position: sticky;
 	inset: auto;
-	top: 0;
+	top: var(--cee-pin-offset, 0px);
 	width: 100%;
-	height: var(--cee-widget-height);
+	height: calc(var(--cee-widget-height) - var(--cee-pin-offset, 0px));
 }
 
 .cee-slide-carousel *,
@@ -311,8 +312,9 @@
 	padding: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 14px;
+	gap: clamp(8px, 1.2vw, 14px);
 	pointer-events: auto;
+	max-width: 100%;
 }
 
 .cee-nav__row {
@@ -444,23 +446,38 @@
 		max-width: 100%;
 	}
 
-	.cee-nav {
-		--cee-nav-offset-v: 20px;
-		--cee-nav-offset-h: 20px;
-	}
-
+	/* O deslocamento H/V no mobile vem dos defaults por dispositivo do controle
+	   "Deslocamento" (Elementor injeta com a especificidade certa). Aqui só
+	   refinamos espaçamento, tipografia e alvos de toque de forma fluida. */
 	.cee-nav__list {
-		gap: 8px;
+		gap: clamp(6px, 2.5vw, 12px);
 	}
 
-	/* Alvos de toque maiores e legíveis. */
+	/* Alvos de toque maiores e legíveis, escalando com a largura da tela. */
 	.cee-nav__item {
-		font-size: 11px;
+		font-size: clamp(10px, 3vw, 12px);
 		letter-spacing: 0.18em;
-		padding: 8px 2px;
+		padding: 8px 4px;
 	}
 
-	/* Menu em linha: permite quebra e centraliza para não estourar a largura. */
+	/* Menu em linha: rola na horizontal em vez de quebrar/estourar a largura,
+	   mantendo o gesto fluido no toque. */
+	.cee-nav[data-nav-orientation="horizontal"] .cee-nav__list,
+	.cee-nav[data-nav-orientation="vertical-text"] .cee-nav__list {
+		flex-wrap: nowrap;
+		justify-content: flex-start;
+		max-width: 100%;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+	}
+
+	.cee-nav[data-nav-orientation="horizontal"] .cee-nav__list::-webkit-scrollbar,
+	.cee-nav[data-nav-orientation="vertical-text"] .cee-nav__list::-webkit-scrollbar {
+		display: none;
+	}
+
+	/* Barra abaixo do slide: centraliza quando cabe. */
 	.cee-nav[data-nav-orientation="horizontal"] .cee-nav__list {
 		justify-content: center;
 	}

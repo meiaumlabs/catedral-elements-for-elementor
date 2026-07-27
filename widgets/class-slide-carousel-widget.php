@@ -365,6 +365,20 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'condition'   => array( 'scroll_enable' => 'yes', 'scroll_pin' => 'yes' ),
 		) );
 
+		$this->add_responsive_control( 'scroll_pin_offset', array(
+			'label'       => __( 'Ancoragem no topo ao travar (offset)', 'catedral-elements' ),
+			'type'        => Controls_Manager::SLIDER,
+			'size_units'  => array( 'px', 'vh' ),
+			'range'       => array(
+				'px' => array( 'min' => 0, 'max' => 300, 'step' => 1 ),
+				'vh' => array( 'min' => 0, 'max' => 50, 'step' => 1 ),
+			),
+			'default'     => array( 'size' => 0, 'unit' => 'px' ),
+			'description' => __( 'Distância do topo da tela onde a seção ancora ao travar. Use para deixar espaço a um cabeçalho fixo (sticky), por exemplo. A altura útil do slide encolhe pelo mesmo valor para caber abaixo do topo.', 'catedral-elements' ),
+			'selectors'   => array( '{{WRAPPER}} .cee-slide-carousel' => '--cee-pin-offset: {{SIZE}}{{UNIT}};' ),
+			'condition'   => array( 'scroll_enable' => 'yes', 'scroll_pin' => 'yes' ),
+		) );
+
 		$this->add_control( 'scroll_sensitivity', array(
 			'label'       => __( 'Sensibilidade (px) — modo slider', 'catedral-elements' ),
 			'type'        => Controls_Manager::SLIDER,
@@ -463,23 +477,27 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		) );
 
 		$this->add_responsive_control( 'nav_offset_v', array(
-			'label'      => __( 'Deslocamento vertical', 'catedral-elements' ),
-			'type'       => Controls_Manager::SLIDER,
-			'size_units' => array( 'px' ),
-			'range'      => array( 'px' => array( 'min' => 0, 'max' => 200 ) ),
-			'default'    => array( 'size' => 40, 'unit' => 'px' ),
-			'selectors'  => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-offset-v: {{SIZE}}{{UNIT}};' ),
-			'condition'  => array( 'nav_enable' => 'yes' ),
+			'label'          => __( 'Deslocamento vertical', 'catedral-elements' ),
+			'type'           => Controls_Manager::SLIDER,
+			'size_units'     => array( 'px' ),
+			'range'          => array( 'px' => array( 'min' => 0, 'max' => 200 ) ),
+			'default'        => array( 'size' => 40, 'unit' => 'px' ),
+			'tablet_default' => array( 'size' => 28, 'unit' => 'px' ),
+			'mobile_default' => array( 'size' => 18, 'unit' => 'px' ),
+			'selectors'      => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-offset-v: {{SIZE}}{{UNIT}};' ),
+			'condition'      => array( 'nav_enable' => 'yes' ),
 		) );
 
 		$this->add_responsive_control( 'nav_offset_h', array(
-			'label'      => __( 'Deslocamento horizontal', 'catedral-elements' ),
-			'type'       => Controls_Manager::SLIDER,
-			'size_units' => array( 'px' ),
-			'range'      => array( 'px' => array( 'min' => 0, 'max' => 200 ) ),
-			'default'    => array( 'size' => 40, 'unit' => 'px' ),
-			'selectors'  => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-offset-h: {{SIZE}}{{UNIT}};' ),
-			'condition'  => array( 'nav_enable' => 'yes' ),
+			'label'          => __( 'Deslocamento horizontal', 'catedral-elements' ),
+			'type'           => Controls_Manager::SLIDER,
+			'size_units'     => array( 'px' ),
+			'range'          => array( 'px' => array( 'min' => 0, 'max' => 200 ) ),
+			'default'        => array( 'size' => 40, 'unit' => 'px' ),
+			'tablet_default' => array( 'size' => 28, 'unit' => 'px' ),
+			'mobile_default' => array( 'size' => 18, 'unit' => 'px' ),
+			'selectors'      => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-offset-h: {{SIZE}}{{UNIT}};' ),
+			'condition'      => array( 'nav_enable' => 'yes' ),
 		) );
 
 		$this->end_controls_section();
