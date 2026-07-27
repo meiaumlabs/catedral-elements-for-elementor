@@ -86,9 +86,13 @@
 		if ( this.pinMode ) {
 			root.dataset.scrollMode = 'pin';
 			this.track.style.transition = 'none';
+			// No pin o empilhamento é dirigido quadro a quadro pelo scroll —
+			// desliga a transição CSS de cada slide para não haver atraso.
+			this.slides.forEach( function ( s ) {
+				s.style.transition = 'none';
+			} );
 		} else {
 			root.dataset.scrollMode = 'slider';
-			this.applyTrackTransition();
 		}
 
 		this.bindCommon();
@@ -117,14 +121,6 @@
 
 		root.__ceeCarousel = this;
 	}
-
-	Carousel.prototype.applyTrackTransition = function () {
-		if ( REDUCED_MOTION ) {
-			this.track.style.transition = 'none';
-			return;
-		}
-		this.track.style.transition = 'transform ' + this.cfg.speed + 'ms ' + this.cfg.easing;
-	};
 
 	/* =================================================================
 	 * Sincronização de estado (comum aos dois modos)
@@ -190,9 +186,38 @@
 		this.progress = progress;
 
 		var pos = progress * last;
-		this.track.style.transform = 'translate3d(' + ( -pos * 100 ) + '%, 0, 0)';
+		this.renderStack( Math.floor( pos ), pos - Math.floor( pos ) );
 
 		this.setActive( Math.round( pos ) );
+	};
+
+	/**
+	 * Posiciona a pilha de slides a partir do progresso contínuo do scroll.
+	 * Slides já vistos (i <= base) ficam assentados; o próximo (base+1) sobe e
+	 * entra ACIMA, interpolando opacidade e deslocamento pela fração f; os
+	 * seguintes ficam ocultos aguardando a vez.
+	 *
+	 * @param {number} base Índice do slide de baixo da transição corrente.
+	 * @param {number} f    Fração da transição para o próximo (0..1).
+	 */
+	Carousel.prototype.renderStack = function ( base, f ) {
+		for ( var i = 0; i < this.slides.length; i++ ) {
+			var s = this.slides[ i ];
+			var op, k;
+			if ( i <= base ) {
+				op = 1;
+				k = 0;
+			} else if ( i === base + 1 ) {
+				op = f;
+				k = 1 - f;
+			} else {
+				op = 0;
+				k = 1;
+			}
+			s.style.opacity = op;
+			s.style.transform = 'translate3d(calc(' + k + ' * var(--cee-ov-x, 6%)), calc(' + k + ' * var(--cee-ov-y, 26px)), 0)';
+			s.style.zIndex = String( i + 1 );
+		}
 	};
 
 	/**
@@ -295,15 +320,17 @@
 		this.currentIndex = index;
 		this.root.dataset.currentIndex = String( index );
 
-		var offset = -100 * index;
-		if ( opts.immediate || REDUCED_MOTION ) {
-			var prev = this.track.style.transition;
-			this.track.style.transition = 'none';
-			this.track.style.transform = 'translate3d(' + offset + '%, 0, 0)';
-			void this.track.offsetWidth;
-			this.track.style.transition = prev;
-		} else {
-			this.track.style.transform = 'translate3d(' + offset + '%, 0, 0)';
+		// A entrada empilhada (fade in up + sobreposição) vem do CSS via a classe
+		// .cee-slide--active. Na carga inicial suprime a animação do primeiro slide.
+		if ( opts.immediate ) {
+			var active = this.slides[ index ];
+			if ( active ) {
+				var prevT = active.style.transition;
+				active.style.transition = 'none';
+				active.classList.add( 'cee-slide--active' );
+				void active.offsetWidth;
+				active.style.transition = prevT;
+			}
 		}
 
 		this.syncSlides( index );

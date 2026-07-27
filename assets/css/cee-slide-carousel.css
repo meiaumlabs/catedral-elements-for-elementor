@@ -8,6 +8,9 @@
 	/* Tokens base (fallbacks — o Elementor sobrescreve via selectors). */
 	--cee-widget-height: 100vh;
 	--cee-pin-offset: 0px;
+	/* Deslocamento de entrada do slide (sobreposição horizontal + fade in up). */
+	--cee-ov-x: 6%;
+	--cee-ov-y: 26px;
 	--cee-transition-speed: 800ms;
 	--cee-easing: cubic-bezier(0.76, 0, 0.24, 1);
 
@@ -94,25 +97,39 @@
 	overflow: hidden;
 }
 
+/* Container de empilhamento: os slides ficam sobrepostos no mesmo lugar e a
+   transição acontece por opacidade/deslocamento de cada slide (não mais por
+   translação do track). Assim o próximo entra ACIMA do anterior. */
 .cee-slide-carousel__track {
-	display: flex;
+	position: absolute;
+	inset: 0;
 	width: 100%;
 	height: 100%;
-	will-change: transform;
-	transform: translate3d(0, 0, 0);
-	transition: transform var(--cee-transition-speed) var(--cee-easing);
 }
 
 /* ---------------------------------------------------------------------
- * Slide
+ * Slide (empilhado: fade in up + sobreposição horizontal)
  * ------------------------------------------------------------------- */
 
 .cee-slide {
-	position: relative;
-	flex: 0 0 100%;
+	position: absolute;
+	inset: 0;
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
+	z-index: 1;
+	opacity: 0;
+	transform: translate3d(var(--cee-ov-x, 6%), var(--cee-ov-y, 26px), 0);
+	will-change: opacity, transform;
+	transition: opacity var(--cee-transition-speed) var(--cee-easing),
+		transform var(--cee-transition-speed) var(--cee-easing);
+}
+
+/* Slide ativo: assenta no lugar e sobe para o topo da pilha. */
+.cee-slide--active {
+	opacity: 1;
+	transform: translate3d(0, 0, 0);
+	z-index: 3;
 }
 
 .cee-slide__media {
@@ -509,6 +526,12 @@
 @media (prefers-reduced-motion: reduce) {
 	.cee-slide-carousel__track {
 		transition: none !important;
+	}
+
+	/* Sem animação: troca instantânea, ativo assentado no lugar. */
+	.cee-slide {
+		transition: none !important;
+		transform: none !important;
 	}
 
 	.cee-slide__image {
