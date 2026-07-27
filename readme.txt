@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.6.0
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,12 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.7.0 =
+* Correção (mobile): o scroll da tela voltou a funcionar sobre o slide. O swipe agora trava a direção do gesto uma única vez (com limiar), então um toque que começa levemente na diagonal não sequestra mais a rolagem vertical da página — gestos verticais nunca são bloqueados.
+* Novo: posição do menu de navegação unificada e responsiva num único controle, incluindo o modo "Barra abaixo do slide" (faixa de largura total no rodapé) além das seis ancoragens sobre o slide (topo/meio/base × esquerda/direita). Ex.: barra no desktop e sobre o slide no mobile. Cor de fundo opcional para a barra.
+* Novo: ajuste do tamanho da imagem em exibição — "Ajuste da imagem" (cover/conter/esticar/reduzir), "Tamanho / zoom da imagem" (responsivo) e cor de fundo atrás da imagem para quando ela não cobre todo o slide.
+* Novo: gradiente de contraste do texto (scrim) sobre a imagem e atrás do conteúdo, com cor, altura e origem (de baixo/de cima) configuráveis, para garantir a legibilidade do título sobre qualquer foto.
 
 = 1.6.0 =
 * Novo: posicionamento completo do título do slide — alinhamento horizontal (esquerda/centro/direita) e deslocamento fino em X e Y (px, %, vw/vh), tudo responsivo por dispositivo, para ajustar a posição do título de forma independente em desktop, tablet e mobile.

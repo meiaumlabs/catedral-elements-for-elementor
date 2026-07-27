@@ -64,7 +64,9 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 
 		// STYLE.
 		$this->style_height();
+		$this->style_image();
 		$this->style_overlay();
+		$this->style_scrim();
 		$this->style_nav();
 		$this->style_title();
 		$this->style_title_position();
@@ -424,40 +426,40 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'condition' => array( 'nav_enable' => 'yes' ),
 		) );
 
-		$this->add_responsive_control( 'nav_position_h', array(
-			'label'                => __( 'Posição horizontal', 'catedral-elements' ),
-			'type'                 => Controls_Manager::CHOOSE,
-			'default'              => 'right',
+		$this->add_responsive_control( 'nav_placement', array(
+			'label'                => __( 'Posição do menu', 'catedral-elements' ),
+			'type'                 => Controls_Manager::SELECT,
+			'default'              => 'top-right',
 			'options'              => array(
-				'left'  => array( 'title' => __( 'Esquerda', 'catedral-elements' ), 'icon' => 'eicon-h-align-left' ),
-				'right' => array( 'title' => __( 'Direita', 'catedral-elements' ), 'icon' => 'eicon-h-align-right' ),
+				'top-left'     => __( 'Sobre o slide — topo esquerda', 'catedral-elements' ),
+				'top-right'    => __( 'Sobre o slide — topo direita', 'catedral-elements' ),
+				'middle-left'  => __( 'Sobre o slide — meio esquerda', 'catedral-elements' ),
+				'middle-right' => __( 'Sobre o slide — meio direita', 'catedral-elements' ),
+				'bottom-left'  => __( 'Sobre o slide — base esquerda', 'catedral-elements' ),
+				'bottom-right' => __( 'Sobre o slide — base direita', 'catedral-elements' ),
+				'bottom-bar'   => __( 'Barra abaixo do slide (largura total)', 'catedral-elements' ),
 			),
-			'toggle'               => false,
+			'description'          => __( 'Escolha onde o menu fica em cada dispositivo. "Barra abaixo do slide" ancora o menu numa faixa de largura total no rodapé do slide; as demais opções sobrepõem o menu sobre a imagem. Ex.: barra no desktop e sobre o slide no mobile.', 'catedral-elements' ),
 			'selectors_dictionary' => array(
-				'left'  => 'left:var(--cee-nav-offset-h);right:auto;align-items:flex-start;',
-				'right' => 'right:var(--cee-nav-offset-h);left:auto;align-items:flex-end;',
+				'top-left'     => '--cee-nav-top:var(--cee-nav-offset-v);--cee-nav-right:auto;--cee-nav-bottom:auto;--cee-nav-left:var(--cee-nav-offset-h);--cee-nav-translate:none;--cee-nav-align:flex-start;--cee-nav-justify:flex-start;--cee-nav-width:auto;--cee-nav-pad:0;',
+				'top-right'    => '--cee-nav-top:var(--cee-nav-offset-v);--cee-nav-right:var(--cee-nav-offset-h);--cee-nav-bottom:auto;--cee-nav-left:auto;--cee-nav-translate:none;--cee-nav-align:flex-end;--cee-nav-justify:flex-start;--cee-nav-width:auto;--cee-nav-pad:0;',
+				'middle-left'  => '--cee-nav-top:50%;--cee-nav-right:auto;--cee-nav-bottom:auto;--cee-nav-left:var(--cee-nav-offset-h);--cee-nav-translate:translateY(-50%);--cee-nav-align:flex-start;--cee-nav-justify:flex-start;--cee-nav-width:auto;--cee-nav-pad:0;',
+				'middle-right' => '--cee-nav-top:50%;--cee-nav-right:var(--cee-nav-offset-h);--cee-nav-bottom:auto;--cee-nav-left:auto;--cee-nav-translate:translateY(-50%);--cee-nav-align:flex-end;--cee-nav-justify:flex-start;--cee-nav-width:auto;--cee-nav-pad:0;',
+				'bottom-left'  => '--cee-nav-top:auto;--cee-nav-right:auto;--cee-nav-bottom:var(--cee-nav-offset-v);--cee-nav-left:var(--cee-nav-offset-h);--cee-nav-translate:none;--cee-nav-align:flex-start;--cee-nav-justify:flex-start;--cee-nav-width:auto;--cee-nav-pad:0;',
+				'bottom-right' => '--cee-nav-top:auto;--cee-nav-right:var(--cee-nav-offset-h);--cee-nav-bottom:var(--cee-nav-offset-v);--cee-nav-left:auto;--cee-nav-translate:none;--cee-nav-align:flex-end;--cee-nav-justify:flex-start;--cee-nav-width:auto;--cee-nav-pad:0;',
+				'bottom-bar'   => '--cee-nav-top:auto;--cee-nav-right:0;--cee-nav-bottom:0;--cee-nav-left:0;--cee-nav-translate:none;--cee-nav-align:flex-end;--cee-nav-justify:center;--cee-nav-width:100%;--cee-nav-pad:14px 20px;',
 			),
 			'selectors'            => array( '{{WRAPPER}} .cee-nav' => '{{VALUE}}' ),
 			'condition'            => array( 'nav_enable' => 'yes' ),
 		) );
 
-		$this->add_responsive_control( 'nav_position_v', array(
-			'label'                => __( 'Posição vertical', 'catedral-elements' ),
-			'type'                 => Controls_Manager::CHOOSE,
-			'default'              => 'top',
-			'options'              => array(
-				'top'    => array( 'title' => __( 'Topo', 'catedral-elements' ), 'icon' => 'eicon-v-align-top' ),
-				'middle' => array( 'title' => __( 'Meio', 'catedral-elements' ), 'icon' => 'eicon-v-align-middle' ),
-				'bottom' => array( 'title' => __( 'Base', 'catedral-elements' ), 'icon' => 'eicon-v-align-bottom' ),
-			),
-			'toggle'               => false,
-			'selectors_dictionary' => array(
-				'top'    => 'top:var(--cee-nav-offset-v);bottom:auto;transform:none;',
-				'middle' => 'top:50%;bottom:auto;transform:translateY(-50%);',
-				'bottom' => 'bottom:var(--cee-nav-offset-v);top:auto;transform:none;',
-			),
-			'selectors'            => array( '{{WRAPPER}} .cee-nav' => '{{VALUE}}' ),
-			'condition'            => array( 'nav_enable' => 'yes' ),
+		$this->add_control( 'nav_bar_bg', array(
+			'label'     => __( 'Fundo da barra (abaixo do slide)', 'catedral-elements' ),
+			'type'      => Controls_Manager::COLOR,
+			'default'   => '',
+			'selectors' => array( '{{WRAPPER}} .cee-nav' => '--cee-nav-bar-bg: {{VALUE}};' ),
+			'description' => __( 'Cor de fundo aplicada apenas quando o menu está no modo "Barra abaixo do slide". Deixe vazio para barra transparente.', 'catedral-elements' ),
+			'condition' => array( 'nav_enable' => 'yes' ),
 		) );
 
 		$this->add_responsive_control( 'nav_offset_v', array(
@@ -543,6 +545,108 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			),
 			'default'    => array( 'size' => 100, 'unit' => 'vh' ),
 			'selectors'  => array( '{{WRAPPER}} .cee-slide-carousel' => '--cee-widget-height: {{SIZE}}{{UNIT}};' ),
+		) );
+
+		$this->end_controls_section();
+	}
+
+	/* ---------------------------------------------------------------------
+	 * STYLE · Imagem do Slide
+	 * ------------------------------------------------------------------- */
+
+	protected function style_image() {
+		$this->start_controls_section( 'style_image', array(
+			'label' => __( 'Imagem do Slide', 'catedral-elements' ),
+			'tab'   => Controls_Manager::TAB_STYLE,
+		) );
+
+		$this->add_responsive_control( 'image_fit', array(
+			'label'       => __( 'Ajuste da imagem', 'catedral-elements' ),
+			'type'        => Controls_Manager::SELECT,
+			'default'     => 'cover',
+			'options'     => array(
+				'cover'      => __( 'Preencher (cover)', 'catedral-elements' ),
+				'contain'    => __( 'Conter (mostra imagem inteira)', 'catedral-elements' ),
+				'fill'       => __( 'Esticar (fill)', 'catedral-elements' ),
+				'scale-down' => __( 'Reduzir se necessário (scale-down)', 'catedral-elements' ),
+			),
+			'description' => __( 'Como a imagem preenche o slide. "Conter" mostra a imagem inteira sem cortar (pode sobrar espaço nas bordas — use a cor de fundo abaixo).', 'catedral-elements' ),
+			'selectors'   => array( '{{WRAPPER}} .cee-slide__image' => 'object-fit: {{VALUE}};' ),
+		) );
+
+		$this->add_responsive_control( 'image_scale', array(
+			'label'       => __( 'Tamanho / zoom da imagem', 'catedral-elements' ),
+			'type'        => Controls_Manager::SLIDER,
+			'size_units'  => array( '%' ),
+			'range'       => array( '%' => array( 'min' => 50, 'max' => 200, 'step' => 1 ) ),
+			'default'     => array( 'size' => 100, 'unit' => '%' ),
+			'description' => __( 'Escala a imagem exibida. 100% = tamanho natural do ajuste; acima aproxima (zoom), abaixo afasta. Responsivo por dispositivo.', 'catedral-elements' ),
+			'selectors'   => array( '{{WRAPPER}} .cee-slide__media' => '--cee-image-scale: calc({{SIZE}} / 100);' ),
+		) );
+
+		$this->add_control( 'image_bg', array(
+			'label'     => __( 'Cor de fundo atrás da imagem', 'catedral-elements' ),
+			'type'      => Controls_Manager::COLOR,
+			'default'   => '#0d0d0d',
+			'description' => __( 'Aparece quando a imagem não cobre todo o slide (modo "Conter" ou zoom para fora).', 'catedral-elements' ),
+			'selectors' => array( '{{WRAPPER}} .cee-slide__media' => 'background-color: {{VALUE}};' ),
+		) );
+
+		$this->end_controls_section();
+	}
+
+	/* ---------------------------------------------------------------------
+	 * STYLE · Gradiente de contraste do texto
+	 * ------------------------------------------------------------------- */
+
+	protected function style_scrim() {
+		$this->start_controls_section( 'style_scrim', array(
+			'label' => __( 'Contraste do Texto', 'catedral-elements' ),
+			'tab'   => Controls_Manager::TAB_STYLE,
+		) );
+
+		$this->add_control( 'scrim_enable', array(
+			'label'        => __( 'Gradiente de contraste', 'catedral-elements' ),
+			'type'         => Controls_Manager::SWITCHER,
+			'label_on'     => __( 'Sim', 'catedral-elements' ),
+			'label_off'    => __( 'Não', 'catedral-elements' ),
+			'return_value' => 'yes',
+			'default'      => 'yes',
+			'description'  => __( 'Adiciona um degradê sobre a imagem, atrás do texto, para o título/subtítulo terem contraste e legibilidade sobre qualquer foto.', 'catedral-elements' ),
+		) );
+
+		$this->add_control( 'scrim_color', array(
+			'label'     => __( 'Cor do degradê', 'catedral-elements' ),
+			'type'      => Controls_Manager::COLOR,
+			'default'   => 'rgba(0,0,0,0.65)',
+			'selectors' => array( '{{WRAPPER}} .cee-slide__scrim' => '--cee-scrim-color: {{VALUE}};' ),
+			'condition' => array( 'scrim_enable' => 'yes' ),
+		) );
+
+		$this->add_responsive_control( 'scrim_size', array(
+			'label'      => __( 'Altura do degradê', 'catedral-elements' ),
+			'type'       => Controls_Manager::SLIDER,
+			'size_units' => array( '%' ),
+			'range'      => array( '%' => array( 'min' => 15, 'max' => 100 ) ),
+			'default'    => array( 'size' => 55, 'unit' => '%' ),
+			'selectors'  => array( '{{WRAPPER}} .cee-slide__scrim' => 'height: {{SIZE}}{{UNIT}};' ),
+			'condition'  => array( 'scrim_enable' => 'yes' ),
+		) );
+
+		$this->add_control( 'scrim_from', array(
+			'label'     => __( 'Origem do degradê', 'catedral-elements' ),
+			'type'      => Controls_Manager::SELECT,
+			'default'   => 'bottom',
+			'options'   => array(
+				'bottom' => __( 'De baixo (texto no rodapé)', 'catedral-elements' ),
+				'top'    => __( 'De cima (texto no topo)', 'catedral-elements' ),
+			),
+			'selectors_dictionary' => array(
+				'bottom' => 'bottom:0;top:auto;--cee-scrim-dir:to top;',
+				'top'    => 'top:0;bottom:auto;--cee-scrim-dir:to bottom;',
+			),
+			'selectors' => array( '{{WRAPPER}} .cee-slide__scrim' => '{{VALUE}}' ),
+			'condition' => array( 'scrim_enable' => 'yes' ),
 		) );
 
 		$this->end_controls_section();
@@ -1234,6 +1338,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		$nav_orientation = in_array( $settings['nav_orientation'] ?? 'vertical', array( 'vertical', 'horizontal', 'vertical-text' ), true ) ? $settings['nav_orientation'] : 'vertical';
 		$content_width   = 'full' === ( $settings['content_width_mode'] ?? 'boxed' ) ? 'full' : 'boxed';
 		$overlay_type    = $settings['overlay_type'] ?? 'gradient';
+		$scrim_enable    = 'yes' === ( $settings['scrim_enable'] ?? 'yes' );
 
 		$root_style = sprintf(
 			'--cee-transition-speed:%dms;--cee-easing:%s;--cee-track-length:%s;',
@@ -1271,7 +1376,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 				<div class="cee-slide-carousel__viewport">
 					<div class="cee-slide-carousel__track">
 						<?php foreach ( $slides as $index => $slide ) : ?>
-							<?php $this->render_slide( $slide, $index, $overlay_type ); ?>
+							<?php $this->render_slide( $slide, $index, $overlay_type, $scrim_enable ); ?>
 						<?php endforeach; ?>
 					</div>
 				</div>
@@ -1309,8 +1414,9 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 	 * @param array  $slide        Dados do slide (item do repeater).
 	 * @param int    $index        Índice.
 	 * @param string $overlay_type Tipo de overlay configurado.
+	 * @param bool   $scrim_enable Exibir gradiente de contraste do texto.
 	 */
-	protected function render_slide( $slide, $index, $overlay_type ) {
+	protected function render_slide( $slide, $index, $overlay_type, $scrim_enable = true ) {
 		$image_url = isset( $slide['slide_image']['url'] ) ? $slide['slide_image']['url'] : '';
 		$image_id  = isset( $slide['slide_image']['id'] ) ? absint( $slide['slide_image']['id'] ) : 0;
 
@@ -1362,6 +1468,10 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 
 				<?php if ( 'none' !== $overlay_type ) : ?>
 					<div class="cee-slide__overlay" aria-hidden="true"></div>
+				<?php endif; ?>
+
+				<?php if ( $scrim_enable ) : ?>
+					<div class="cee-slide__scrim" aria-hidden="true"></div>
 				<?php endif; ?>
 			</div>
 

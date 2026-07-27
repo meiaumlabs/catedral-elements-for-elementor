@@ -128,13 +128,14 @@
 	height: 100%;
 	object-fit: cover;
 	object-position: center center;
-	/* Zoom lento contínuo (Ken Burns) — desligado em reduced-motion. */
-	transform: scale(1.06);
+	/* Zoom lento contínuo (Ken Burns) — desligado em reduced-motion.
+	   --cee-image-scale (controle "Tamanho / zoom da imagem") multiplica a escala. */
+	transform: scale(calc(var(--cee-image-scale, 1) * 1.06));
 	transition: transform 1200ms var(--cee-easing);
 }
 
 .cee-slide--active .cee-slide__image {
-	transform: scale(1);
+	transform: scale(var(--cee-image-scale, 1));
 	transition: transform 8000ms ease-out;
 }
 
@@ -144,6 +145,19 @@
 	z-index: 2;
 	pointer-events: none;
 	background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.40) 100%);
+}
+
+/* Gradiente de contraste do texto (scrim). Fica sobre a imagem/overlay e
+   atrás do bloco de conteúdo, garantindo legibilidade do título. */
+.cee-slide__scrim {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 55%;
+	z-index: 2;
+	pointer-events: none;
+	background: linear-gradient(var(--cee-scrim-dir, to top), var(--cee-scrim-color, rgba(0, 0, 0, 0.65)) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
 /* ---------------------------------------------------------------------
@@ -276,12 +290,19 @@
 	z-index: 10;
 	display: flex;
 	pointer-events: none;
-	/* Fallback de ancoragem (topo-direita). A posição real vem dos controles
-	   responsivos nav_position_h/nav_position_v via CSS gerado pelo Elementor,
-	   que tem especificidade maior e sobrescreve estes valores por dispositivo. */
-	top: var(--cee-nav-offset-v);
-	right: var(--cee-nav-offset-h);
-	align-items: flex-end;
+	/* Ancoragem 100% via variáveis (controle "Posição do menu"). Cada valor
+	   define o conjunto completo de variáveis, então a troca por dispositivo é
+	   limpa (sem herança parcial entre breakpoints). Fallback = topo-direita. */
+	top: var(--cee-nav-top, var(--cee-nav-offset-v));
+	right: var(--cee-nav-right, var(--cee-nav-offset-h));
+	bottom: var(--cee-nav-bottom, auto);
+	left: var(--cee-nav-left, auto);
+	width: var(--cee-nav-width, auto);
+	transform: var(--cee-nav-translate, none);
+	align-items: var(--cee-nav-align, flex-end);
+	justify-content: var(--cee-nav-justify, flex-start);
+	padding: var(--cee-nav-pad, 0);
+	background: var(--cee-nav-bar-bg, transparent);
 }
 
 .cee-nav__list {
@@ -474,7 +495,7 @@
 	}
 
 	.cee-slide__image {
-		transform: none !important;
+		transform: scale(var(--cee-image-scale, 1)) !important;
 		transition: none !important;
 	}
 

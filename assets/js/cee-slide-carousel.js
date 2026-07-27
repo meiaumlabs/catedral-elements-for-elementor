@@ -345,29 +345,38 @@
 		var self = this;
 		var startX = 0;
 		var startY = 0;
-		var horizontal = false;
+		var axis = null;       // 'x' (swipe de slide) | 'y' (rolar a página) | null
+		var TOUCH_THRESHOLD = 8; // px de movimento antes de travar a direção do gesto
 
 		this.root.addEventListener( 'touchstart', function ( e ) {
 			var t = e.touches[ 0 ];
 			startX = t.clientX;
 			startY = t.clientY;
-			horizontal = false;
+			axis = null;
 		}, { passive: true } );
 
 		this.root.addEventListener( 'touchmove', function ( e ) {
 			var t = e.touches[ 0 ];
 			var dx = t.clientX - startX;
 			var dy = t.clientY - startY;
-			if ( Math.abs( dx ) > Math.abs( dy ) ) {
-				horizontal = true;
-				if ( e.cancelable ) {
-					e.preventDefault();
+			// Trava a direção UMA única vez por gesto, só depois de passar o limiar.
+			// Assim um começo levemente diagonal não sequestra (e cancela) a rolagem
+			// vertical da página no mobile — a tela volta a rolar normalmente.
+			if ( axis === null ) {
+				if ( Math.abs( dx ) < TOUCH_THRESHOLD && Math.abs( dy ) < TOUCH_THRESHOLD ) {
+					return;
 				}
+				axis = Math.abs( dx ) > Math.abs( dy ) ? 'x' : 'y';
+			}
+			// Só bloqueia o gesto quando é claramente horizontal (troca de slide).
+			// Gestos verticais nunca são bloqueados → o scroll da tela é preservado.
+			if ( axis === 'x' && e.cancelable ) {
+				e.preventDefault();
 			}
 		}, { passive: false } );
 
 		this.root.addEventListener( 'touchend', function ( e ) {
-			if ( ! horizontal ) {
+			if ( axis !== 'x' ) {
 				return;
 			}
 			var t = e.changedTouches[ 0 ];
