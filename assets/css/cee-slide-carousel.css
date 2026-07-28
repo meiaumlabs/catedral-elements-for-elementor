@@ -173,6 +173,17 @@
 	transition: transform 8000ms ease-out;
 }
 
+/* Blindagem contra regras de tema em `.elementor img` (ex.: `height:auto`,
+   `max-width:100%`), que têm especificidade 0-1-1 e venceriam a nossa
+   `.cee-slide__image` (0-1-0), deixando a imagem com a altura intrínseca em
+   vez de preencher o slide. Aqui 0-2-0 vence e garante o preenchimento; o
+   `object-fit`/`object-position` continuam vindo dos controles do widget. */
+.cee-slide-carousel .cee-slide__image {
+	width: 100%;
+	height: 100%;
+	max-width: none;
+}
+
 .cee-slide__overlay {
 	position: absolute;
 	inset: 0;
