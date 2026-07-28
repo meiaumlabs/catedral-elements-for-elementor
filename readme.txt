@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.11.0
+Stable tag: 1.12.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,13 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.12.0 =
+* Novo: controles de imagem no padrão do "Plano de fundo" do Elementor, na seção "Imagem do Slide" (Estilo), todos responsivos por dispositivo:
+  * "Proporção da tela" — trava a altura do slide numa proporção (1:1, 3:2, 4:3, 16:9, 21:9, 9:16) baseada na largura da tela; "Padrão" mantém a altura do widget.
+  * "Tamanho de exibição" (cobertura/conter/esticar/reduzir) e "Posição" (foco) agora disponíveis também como padrão global do widget.
+  * "Resolução da imagem" — escolhe o tamanho de arquivo servido (Completo ou tamanhos registrados) para aliviar o carregamento.
+* Melhoria: o "Foco da imagem" de cada slide ganhou a opção "Usar posição global (Estilo)" (novo padrão) — os slides herdam a posição global e só sobrescrevem quando você escolhe um foco específico.
 
 = 1.11.0 =
 * Novo: seletor "Estilo do widget" (em Conteúdo) com o preset **Editorial · Full Screen**. Ao selecionar, o widget adota o layout imobiliário de tela cheia: menu vertical no topo-esquerda com itens em caixa alta e espaçados (ativo em destaque, demais esmaecidos), título ancorado na base e um scrim superior sutil para legibilidade do menu sobre fotos claras. Todos os controles (cor, tipografia, offsets, tamanho, etc.) continuam ajustando o resultado por cima do preset; voltar para "Padrão" restaura o comportamento do controle "Posição do menu".

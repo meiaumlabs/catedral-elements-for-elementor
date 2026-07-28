@@ -35,7 +35,7 @@
 
 /* Modo slider (padrão / sem pin): seção ocupa uma tela e recorta os slides. */
 .cee-slide-carousel[data-scroll-mode="slider"] {
-	height: var(--cee-widget-height);
+	height: var(--cee-ratio-height, var(--cee-widget-height));
 	overflow: hidden;
 	background: #0d0d0d;
 }
@@ -44,7 +44,7 @@
    a rolagem vertical avança os slides na horizontal. Ao esgotar os slides, o
    wrapper termina e a página segue naturalmente para a próxima seção. */
 .cee-slide-carousel[data-scroll-mode="pin"] {
-	height: calc(var(--cee-widget-height) * var(--cee-track-length));
+	height: calc(var(--cee-ratio-height, var(--cee-widget-height)) * var(--cee-track-length));
 	overflow: visible;
 	background: transparent;
 }
@@ -62,7 +62,7 @@
 	inset: auto;
 	top: var(--cee-pin-offset, 0px);
 	width: 100%;
-	height: calc(var(--cee-widget-height) - var(--cee-pin-offset, 0px));
+	height: calc(var(--cee-ratio-height, var(--cee-widget-height)) - var(--cee-pin-offset, 0px));
 }
 
 .cee-slide-carousel *,

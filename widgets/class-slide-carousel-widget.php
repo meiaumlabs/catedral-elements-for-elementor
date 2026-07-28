@@ -131,8 +131,9 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		$repeater->add_control( 'slide_image_position', array(
 			'label'   => __( 'Foco da imagem', 'catedral-elements' ),
 			'type'    => Controls_Manager::SELECT,
-			'default' => 'center center',
+			'default' => 'global',
 			'options' => array(
+				'global'        => __( 'Usar posição global (Estilo)', 'catedral-elements' ),
 				'top left'      => __( 'Superior esquerda', 'catedral-elements' ),
 				'top center'    => __( 'Superior centro', 'catedral-elements' ),
 				'top right'     => __( 'Superior direita', 'catedral-elements' ),
@@ -613,18 +614,63 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'tab'   => Controls_Manager::TAB_STYLE,
 		) );
 
+		$this->add_responsive_control( 'image_ratio', array(
+			'label'                => __( 'Proporção da tela', 'catedral-elements' ),
+			'type'                 => Controls_Manager::SELECT,
+			'default'              => 'padrao',
+			'options'              => array(
+				'padrao' => __( 'Padrão (usa a altura do widget)', 'catedral-elements' ),
+				'1:1'    => '1:1',
+				'3:2'    => '3:2',
+				'4:3'    => '4:3',
+				'16:9'   => '16:9',
+				'21:9'   => '21:9',
+				'9:16'   => '9:16 (vertical)',
+			),
+			'description'          => __( 'Trava a altura do slide numa proporção (baseada na largura da tela), responsiva por dispositivo. "Padrão" usa a altura definida na seção "Altura do Widget".', 'catedral-elements' ),
+			'selectors_dictionary' => array(
+				'padrao' => 'var(--cee-widget-height)',
+				'1:1'    => '100vw',
+				'3:2'    => '66.6667vw',
+				'4:3'    => '75vw',
+				'16:9'   => '56.25vw',
+				'21:9'   => '42.8571vw',
+				'9:16'   => '177.778vw',
+			),
+			'selectors'            => array( '{{WRAPPER}} .cee-slide-carousel' => '--cee-ratio-height: {{VALUE}};' ),
+		) );
+
 		$this->add_responsive_control( 'image_fit', array(
-			'label'       => __( 'Ajuste da imagem', 'catedral-elements' ),
-			'type'        => Controls_Manager::SELECT,
-			'default'     => 'cover',
-			'options'     => array(
-				'cover'      => __( 'Preencher (cover)', 'catedral-elements' ),
+			'label'                => __( 'Tamanho de exibição', 'catedral-elements' ),
+			'type'                 => Controls_Manager::SELECT,
+			'default'              => 'cover',
+			'options'              => array(
+				'cover'      => __( 'Cobertura (cover)', 'catedral-elements' ),
 				'contain'    => __( 'Conter (mostra imagem inteira)', 'catedral-elements' ),
 				'fill'       => __( 'Esticar (fill)', 'catedral-elements' ),
 				'scale-down' => __( 'Reduzir se necessário (scale-down)', 'catedral-elements' ),
 			),
-			'description' => __( 'Como a imagem preenche o slide. "Conter" mostra a imagem inteira sem cortar (pode sobrar espaço nas bordas — use a cor de fundo abaixo).', 'catedral-elements' ),
-			'selectors'   => array( '{{WRAPPER}} .cee-slide__image' => 'object-fit: {{VALUE}};' ),
+			'description'          => __( 'Como a imagem preenche o slide. "Conter" mostra a imagem inteira sem cortar (pode sobrar espaço nas bordas — use a cor de fundo abaixo).', 'catedral-elements' ),
+			'selectors'            => array( '{{WRAPPER}} .cee-slide__image' => 'object-fit: {{VALUE}};' ),
+		) );
+
+		$this->add_responsive_control( 'image_position', array(
+			'label'       => __( 'Posição', 'catedral-elements' ),
+			'type'        => Controls_Manager::SELECT,
+			'default'     => 'center center',
+			'options'     => array(
+				'top left'      => __( 'Superior esquerda', 'catedral-elements' ),
+				'top center'    => __( 'Superior centro', 'catedral-elements' ),
+				'top right'     => __( 'Superior direita', 'catedral-elements' ),
+				'center left'   => __( 'Centro esquerda', 'catedral-elements' ),
+				'center center' => __( 'Centro ao centro', 'catedral-elements' ),
+				'center right'  => __( 'Centro direita', 'catedral-elements' ),
+				'bottom left'   => __( 'Inferior esquerda', 'catedral-elements' ),
+				'bottom center' => __( 'Inferior centro', 'catedral-elements' ),
+				'bottom right'  => __( 'Inferior direita', 'catedral-elements' ),
+			),
+			'description' => __( 'Posição/foco padrão da imagem, por dispositivo. Cada slide pode sobrescrever no controle "Foco da imagem" (deixe em "Usar posição global" para herdar esta).', 'catedral-elements' ),
+			'selectors'   => array( '{{WRAPPER}} .cee-slide__image' => 'object-position: {{VALUE}};' ),
 		) );
 
 		$this->add_responsive_control( 'image_scale', array(
@@ -637,6 +683,14 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'selectors'   => array( '{{WRAPPER}} .cee-slide__media' => '--cee-image-scale: calc({{SIZE}} / 100);' ),
 		) );
 
+		$this->add_control( 'image_size', array(
+			'label'       => __( 'Resolução da imagem', 'catedral-elements' ),
+			'type'        => Controls_Manager::SELECT,
+			'default'     => 'full',
+			'options'     => $this->get_image_size_options(),
+			'description' => __( 'Tamanho do arquivo servido para cada imagem. "Completo" usa a imagem original; tamanhos menores aliviam o carregamento. Não se aplica a imagens dinâmicas.', 'catedral-elements' ),
+		) );
+
 		$this->add_control( 'image_bg', array(
 			'label'     => __( 'Cor de fundo atrás da imagem', 'catedral-elements' ),
 			'type'      => Controls_Manager::COLOR,
@@ -646,6 +700,20 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		) );
 
 		$this->end_controls_section();
+	}
+
+	/**
+	 * Opções de tamanho de imagem registradas no WordPress (+ "Completo").
+	 *
+	 * @return array
+	 */
+	protected function get_image_size_options() {
+		$options = array();
+		foreach ( get_intermediate_image_sizes() as $size ) {
+			$options[ $size ] = ucwords( str_replace( array( '_', '-' ), ' ', $size ) );
+		}
+		$options['full'] = __( 'Completo', 'catedral-elements' );
+		return $options;
 	}
 
 	/* ---------------------------------------------------------------------
@@ -1393,6 +1461,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		$content_width   = 'full' === ( $settings['content_width_mode'] ?? 'boxed' ) ? 'full' : 'boxed';
 		$overlay_type    = $settings['overlay_type'] ?? 'gradient';
 		$scrim_enable    = 'yes' === ( $settings['scrim_enable'] ?? 'yes' );
+		$image_size      = ! empty( $settings['image_size'] ) ? $settings['image_size'] : 'full';
 
 		$root_style = sprintf(
 			'--cee-transition-speed:%dms;--cee-easing:%s;--cee-track-length:%s;',
@@ -1434,7 +1503,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 				<div class="cee-slide-carousel__viewport">
 					<div class="cee-slide-carousel__track">
 						<?php foreach ( $slides as $index => $slide ) : ?>
-							<?php $this->render_slide( $slide, $index, $overlay_type, $scrim_enable ); ?>
+							<?php $this->render_slide( $slide, $index, $overlay_type, $scrim_enable, $image_size ); ?>
 						<?php endforeach; ?>
 					</div>
 				</div>
@@ -1473,13 +1542,26 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 	 * @param int    $index        Índice.
 	 * @param string $overlay_type Tipo de overlay configurado.
 	 * @param bool   $scrim_enable Exibir gradiente de contraste do texto.
+	 * @param string $image_size   Tamanho de imagem registrado a servir ("full" = original).
 	 */
-	protected function render_slide( $slide, $index, $overlay_type, $scrim_enable = true ) {
+	protected function render_slide( $slide, $index, $overlay_type, $scrim_enable = true, $image_size = 'full' ) {
 		$image_url = isset( $slide['slide_image']['url'] ) ? $slide['slide_image']['url'] : '';
 		$image_id  = isset( $slide['slide_image']['id'] ) ? absint( $slide['slide_image']['id'] ) : 0;
 
-		$position = $slide['slide_image_position'] ?? 'center center';
-		if ( 'custom' === $position ) {
+		// Resolução da imagem: serve o tamanho registrado escolhido (quando houver anexo).
+		if ( $image_id && 'full' !== $image_size ) {
+			$sized = wp_get_attachment_image_src( $image_id, $image_size );
+			if ( is_array( $sized ) && ! empty( $sized[0] ) ) {
+				$image_url = $sized[0];
+			}
+		}
+
+		// Foco por-slide sobrescreve a posição global; "global" (ou vazio) herda do Estilo.
+		$position     = $slide['slide_image_position'] ?? 'global';
+		$emit_position = true;
+		if ( 'global' === $position || '' === $position ) {
+			$emit_position = false;
+		} elseif ( 'custom' === $position ) {
 			$position = '' !== ( $slide['slide_image_position_custom'] ?? '' ) ? $slide['slide_image_position_custom'] : 'center center';
 		}
 
@@ -1519,7 +1601,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 					<img class="cee-slide__image"
 						src="<?php echo esc_url( $image_url ); ?>"
 						alt="<?php echo esc_attr( $alt ); ?>"
-						style="object-position: <?php echo esc_attr( $position ); ?>;"
+						<?php if ( $emit_position ) : ?>style="object-position: <?php echo esc_attr( $position ); ?>;"<?php endif; ?>
 						loading="<?php echo esc_attr( $is_active ? 'eager' : 'lazy' ); ?>"
 						decoding="async" />
 				<?php endif; ?>
