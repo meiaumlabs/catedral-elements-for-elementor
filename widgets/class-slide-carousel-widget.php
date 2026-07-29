@@ -1238,6 +1238,59 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			'tab'   => Controls_Manager::TAB_STYLE,
 		) );
 
+		$this->add_control( 'btn_position', array(
+			'label'       => __( 'Posição do botão', 'catedral-elements' ),
+			'type'        => Controls_Manager::SELECT,
+			'default'     => 'above',
+			'options'     => array(
+				'above'  => __( 'Acima do título', 'catedral-elements' ),
+				'beside' => __( 'Ao lado do título', 'catedral-elements' ),
+				'custom' => __( 'Personalizado', 'catedral-elements' ),
+			),
+			'description' => __( 'Acima: o botão fica sobre o título, no mesmo enquadramento, com a distância definida abaixo. Ao lado: alinhado horizontalmente ao título. Personalizado: posicione livremente com os deslocamentos.', 'catedral-elements' ),
+		) );
+
+		$this->add_responsive_control( 'btn_gap', array(
+			'label'      => __( 'Distância do título', 'catedral-elements' ),
+			'type'       => Controls_Manager::SLIDER,
+			'size_units' => array( 'px', 'em' ),
+			'range'      => array(
+				'px' => array( 'min' => 0, 'max' => 120 ),
+				'em' => array( 'min' => 0, 'max' => 8 ),
+			),
+			'default'    => array( 'size' => 30, 'unit' => 'px' ),
+			'selectors'  => array( '{{WRAPPER}} .cee-slide__titlegroup' => 'gap: {{SIZE}}{{UNIT}};' ),
+			'condition'  => array( 'btn_position' => array( 'above', 'beside' ) ),
+		) );
+
+		$this->add_responsive_control( 'btn_offset_x', array(
+			'label'      => __( 'Deslocamento horizontal', 'catedral-elements' ),
+			'type'       => Controls_Manager::SLIDER,
+			'size_units' => array( 'px', '%', 'vw' ),
+			'range'      => array(
+				'px' => array( 'min' => -500, 'max' => 500 ),
+				'%'  => array( 'min' => -100, 'max' => 100 ),
+				'vw' => array( 'min' => -100, 'max' => 100 ),
+			),
+			'default'    => array( 'size' => 0, 'unit' => 'px' ),
+			'selectors'  => array( '{{WRAPPER}} .cee-slide__content' => '--cee-btn-x: {{SIZE}}{{UNIT}};' ),
+			'condition'  => array( 'btn_position' => 'custom' ),
+		) );
+
+		$this->add_responsive_control( 'btn_offset_y', array(
+			'label'      => __( 'Deslocamento vertical', 'catedral-elements' ),
+			'type'       => Controls_Manager::SLIDER,
+			'size_units' => array( 'px', '%', 'vh' ),
+			'range'      => array(
+				'px' => array( 'min' => -500, 'max' => 500 ),
+				'%'  => array( 'min' => -100, 'max' => 100 ),
+				'vh' => array( 'min' => -100, 'max' => 100 ),
+			),
+			'default'    => array( 'size' => 0, 'unit' => 'px' ),
+			'selectors'  => array( '{{WRAPPER}} .cee-slide__content' => '--cee-btn-y: {{SIZE}}{{UNIT}};' ),
+			'condition'  => array( 'btn_position' => 'custom' ),
+		) );
+
 		$this->add_control( 'btn_bg_color', array(
 			'label'     => __( 'Fundo', 'catedral-elements' ),
 			'type'      => Controls_Manager::COLOR,
@@ -1472,6 +1525,8 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 
 		$skin = in_array( $settings['skin'] ?? 'padrao', array( 'padrao', 'editorial' ), true ) ? $settings['skin'] : 'padrao';
 
+		$btn_position = in_array( $settings['btn_position'] ?? 'above', array( 'above', 'beside', 'custom' ), true ) ? $settings['btn_position'] : 'above';
+
 		$root_classes = 'cee-slide-carousel cee-skin-' . $skin;
 		if ( $autoplay ) {
 			$root_classes .= ' cee-slide-carousel--autoplay';
@@ -1479,6 +1534,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		?>
 		<div class="<?php echo esc_attr( $root_classes ); ?>"
 			data-skin="<?php echo esc_attr( $skin ); ?>"
+			data-btn-position="<?php echo esc_attr( $btn_position ); ?>"
 			style="<?php echo esc_attr( $root_style ); ?>"
 			data-autoplay="<?php echo esc_attr( $autoplay ? 'true' : 'false' ); ?>"
 			data-autoplay-interval="<?php echo esc_attr( $interval ); ?>"
@@ -1503,7 +1559,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 				<div class="cee-slide-carousel__viewport">
 					<div class="cee-slide-carousel__track">
 						<?php foreach ( $slides as $index => $slide ) : ?>
-							<?php $this->render_slide( $slide, $index, $overlay_type, $scrim_enable, $image_size ); ?>
+							<?php $this->render_slide( $slide, $index, $overlay_type, $scrim_enable, $image_size, $btn_position ); ?>
 						<?php endforeach; ?>
 					</div>
 				</div>
@@ -1543,8 +1599,9 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 	 * @param string $overlay_type Tipo de overlay configurado.
 	 * @param bool   $scrim_enable Exibir gradiente de contraste do texto.
 	 * @param string $image_size   Tamanho de imagem registrado a servir ("full" = original).
+	 * @param string $btn_position Posição do botão CTA ("above", "beside" ou "custom").
 	 */
-	protected function render_slide( $slide, $index, $overlay_type, $scrim_enable = true, $image_size = 'full' ) {
+	protected function render_slide( $slide, $index, $overlay_type, $scrim_enable = true, $image_size = 'full', $btn_position = 'above' ) {
 		$image_url = isset( $slide['slide_image']['url'] ) ? $slide['slide_image']['url'] : '';
 		$image_id  = isset( $slide['slide_image']['id'] ) ? absint( $slide['slide_image']['id'] ) : 0;
 
@@ -1591,6 +1648,11 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		if ( ! empty( $rel_parts ) ) {
 			$btn_attrs .= ' rel="' . esc_attr( implode( ' ', $rel_parts ) ) . '"';
 		}
+
+		$btn_markup = '';
+		if ( '' !== $btn_text && '' !== $btn_url ) {
+			$btn_markup = '<a class="cee-slide__btn" href="' . esc_url( $btn_url ) . '"' . $btn_attrs . '>' . esc_html( $btn_text ) . '</a>';
+		}
 		?>
 		<div class="cee-slide<?php echo $is_active ? ' cee-slide--active' : ''; ?>"
 			data-slide-index="<?php echo esc_attr( $index ); ?>"
@@ -1617,9 +1679,13 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 
 			<div class="cee-slide__inner">
 				<div class="cee-slide__content">
-					<?php if ( ! empty( $slide['slide_title'] ) ) : ?>
-						<<?php echo esc_attr( $title_tag ); ?> class="cee-slide__title"><?php echo nl2br( esc_html( $slide['slide_title'] ) ); ?></<?php echo esc_attr( $title_tag ); ?>>
-					<?php endif; ?>
+					<div class="cee-slide__titlegroup">
+						<?php if ( ! empty( $slide['slide_title'] ) ) : ?>
+							<<?php echo esc_attr( $title_tag ); ?> class="cee-slide__title"><?php echo nl2br( esc_html( $slide['slide_title'] ) ); ?></<?php echo esc_attr( $title_tag ); ?>>
+						<?php endif; ?>
+
+						<?php if ( 'custom' !== $btn_position ) { echo $btn_markup; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup pré-escapado. */ } ?>
+					</div>
 
 					<?php if ( ! empty( $slide['slide_subtitle'] ) ) : ?>
 						<div class="cee-slide__subtitle"><?php echo esc_html( $slide['slide_subtitle'] ); ?></div>
@@ -1629,11 +1695,7 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 						<div class="cee-slide__text"><?php echo wp_kses_post( $slide['slide_content'] ); ?></div>
 					<?php endif; ?>
 
-					<?php if ( '' !== $btn_text && '' !== $btn_url ) : ?>
-						<a class="cee-slide__btn" href="<?php echo esc_url( $btn_url ); ?>"<?php echo $btn_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attrs are hardcoded literals. ?>>
-							<?php echo esc_html( $btn_text ); ?>
-						</a>
-					<?php endif; ?>
+					<?php if ( 'custom' === $btn_position ) { echo $btn_markup; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup pré-escapado. */ } ?>
 				</div>
 			</div>
 		</div>

@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.12.1
+Stable tag: 1.13.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,12 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.13.0 =
+* Novo: controle "Posição do botão" (em Botão CTA) para posicionar o CTA em relação ao título:
+  * "Acima do título" (novo padrão) — o botão fica sobre o título, no mesmo enquadramento, com "Distância do título" configurável (30px por padrão), responsiva por dispositivo.
+  * "Ao lado do título" — botão alinhado horizontalmente ao título, com a mesma "Distância do título".
+  * "Personalizado" — posicione o botão livremente dentro do bloco de conteúdo com "Deslocamento horizontal" e "Deslocamento vertical" (px/%/vw/vh), responsivos por dispositivo.
 
 = 1.12.1 =
 * Correção: a imagem do slide não preenchia a altura quando o tema/página define `.elementor img { height: auto }`. Essa regra do tema (especificidade 0-1-1) vencia a do widget (0-1-0) e, em `<img>` posicionada com `inset:0`, o `height:auto` faz a imagem usar a altura intrínseca em vez de esticar — deixando a foto curta no topo e o fundo aparecendo embaixo. A altura da imagem passou a ser blindada com especificidade 0-2-0, garantindo o preenchimento independentemente do tema.

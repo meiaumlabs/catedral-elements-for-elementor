@@ -327,6 +327,42 @@
 }
 
 /* ---------------------------------------------------------------------
+ * Posição do botão CTA relativo ao título
+ * ------------------------------------------------------------------- */
+
+/* Grupo título + botão. O botão herda o mesmo enquadramento do título. */
+.cee-slide__titlegroup {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 30px; /* distância padrão do botão ao título (controle "Distância do título") */
+}
+
+.cee-slide__titlegroup .cee-slide__btn {
+	margin-top: 0; /* o espaçamento é dado pelo "gap"; anula a margem padrão do botão */
+}
+
+/* Padrão: botão ACIMA do título. */
+.cee-slide-carousel[data-btn-position="above"] .cee-slide__titlegroup .cee-slide__btn {
+	order: -1;
+}
+
+/* Ao lado do título: alinhado horizontalmente, botão à direita do título. */
+.cee-slide-carousel[data-btn-position="beside"] .cee-slide__titlegroup {
+	flex-direction: row;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+/* Personalizado: botão posicionado livremente dentro do bloco de conteúdo. */
+.cee-slide-carousel[data-btn-position="custom"] .cee-slide__btn {
+	position: absolute;
+	left: var(--cee-btn-x, 0);
+	top: var(--cee-btn-y, 0);
+	margin: 0;
+}
+
+/* ---------------------------------------------------------------------
  * Menu de navegação vertical
  * ------------------------------------------------------------------- */
 
