@@ -76,15 +76,50 @@ class CEE_Hotspots_Widget extends Widget_Base {
 
 	protected function section_map() {
 		$this->start_controls_section( 'sec_map', array(
-			'label' => __( 'Imagem base', 'catedral-elements' ),
+			'label' => __( 'Palco', 'catedral-elements' ),
 			'tab'   => Controls_Manager::TAB_CONTENT,
 		) );
 
+		$this->add_control( 'stage_mode', array(
+			'label'        => __( 'Tipo de palco', 'catedral-elements' ),
+			'type'         => Controls_Manager::SELECT,
+			'default'      => 'image',
+			'options'      => array(
+				'image'   => __( 'Imagem base (âncora)', 'catedral-elements' ),
+				'blank'   => __( 'Palco livre (sem imagem)', 'catedral-elements' ),
+				'overlay' => __( 'Sobrepor o conteúdo', 'catedral-elements' ),
+			),
+			'description'  => __( 'Livre: uma área com altura própria onde você posiciona os pontos. Sobrepor: o widget vira uma camada sobre o conteúdo atrás dele (coloque-o dentro de um Contêiner com posição Relativa).', 'catedral-elements' ),
+			'prefix_class' => 'cee-hs-mode-',
+		) );
+
 		$this->add_control( 'base_image', array(
-			'label'   => __( 'Imagem', 'catedral-elements' ),
-			'type'    => Controls_Manager::MEDIA,
-			'default' => array( 'url' => Utils::get_placeholder_image_src() ),
-			'dynamic' => array( 'active' => true ),
+			'label'     => __( 'Imagem', 'catedral-elements' ),
+			'type'      => Controls_Manager::MEDIA,
+			'default'   => array( 'url' => Utils::get_placeholder_image_src() ),
+			'dynamic'   => array( 'active' => true ),
+			'condition' => array( 'stage_mode' => 'image' ),
+		) );
+
+		$this->add_responsive_control( 'stage_height', array(
+			'label'      => __( 'Altura do palco', 'catedral-elements' ),
+			'type'       => Controls_Manager::SLIDER,
+			'size_units' => array( 'px', 'vh' ),
+			'range'      => array(
+				'px' => array( 'min' => 120, 'max' => 1200 ),
+				'vh' => array( 'min' => 10, 'max' => 100 ),
+			),
+			'default'    => array( 'size' => 400, 'unit' => 'px' ),
+			'selectors'  => array( '{{WRAPPER}} .cee-hotspots' => '--cee-hs-stage-height: {{SIZE}}{{UNIT}};' ),
+			'condition'  => array( 'stage_mode' => array( 'blank', 'overlay' ) ),
+		) );
+
+		$this->add_control( 'stage_bg', array(
+			'label'     => __( 'Fundo do palco', 'catedral-elements' ),
+			'type'      => Controls_Manager::COLOR,
+			'default'   => '',
+			'selectors' => array( '{{WRAPPER}} .cee-hotspots__stage' => 'background-color: {{VALUE}};' ),
+			'condition' => array( 'stage_mode' => array( 'blank', 'overlay' ) ),
 		) );
 
 		$this->add_responsive_control( 'stage_max_width', array(
@@ -551,7 +586,10 @@ class CEE_Hotspots_Widget extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 
-		$base_url = isset( $settings['base_image']['url'] ) ? $settings['base_image']['url'] : '';
+		$stage_mode = in_array( $settings['stage_mode'] ?? 'image', array( 'image', 'blank', 'overlay' ), true ) ? $settings['stage_mode'] : 'image';
+		$is_image   = 'image' === $stage_mode;
+
+		$base_url = $is_image && isset( $settings['base_image']['url'] ) ? $settings['base_image']['url'] : '';
 		$base_id  = isset( $settings['base_image']['id'] ) ? absint( $settings['base_image']['id'] ) : 0;
 		$base_alt = $base_id ? get_post_meta( $base_id, '_wp_attachment_image_alt', true ) : '';
 
@@ -562,9 +600,9 @@ class CEE_Hotspots_Widget extends Widget_Base {
 		$img_natural = 'padrao' === $ratio ? 'yes' : 'no';
 		$uid     = $this->get_id();
 		?>
-		<div class="cee-hotspots" data-pulse="<?php echo esc_attr( $pulse ); ?>" data-img-natural="<?php echo esc_attr( $img_natural ); ?>">
+		<div class="cee-hotspots" data-pulse="<?php echo esc_attr( $pulse ); ?>" data-img-natural="<?php echo esc_attr( $img_natural ); ?>" data-stage-mode="<?php echo esc_attr( $stage_mode ); ?>">
 			<div class="cee-hotspots__stage">
-				<?php if ( $base_url ) : ?>
+				<?php if ( $is_image && $base_url ) : ?>
 					<img class="cee-hotspots__base" src="<?php echo esc_url( $base_url ); ?>" alt="<?php echo esc_attr( $base_alt ); ?>" loading="lazy" decoding="async" />
 				<?php endif; ?>
 

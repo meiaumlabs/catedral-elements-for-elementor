@@ -23,6 +23,8 @@
 	--cee-hs-img-fit: cover;
 	--cee-hs-img-pos: center center;
 
+	--cee-hs-stage-height: 400px;
+
 	display: flex;
 	justify-content: center;
 	width: 100%;
@@ -39,6 +41,42 @@
 	display: block;
 	width: 100%;
 	height: auto;
+}
+
+/* ---------------------------------------------------------------------
+ * Palco sem imagem (livre) e sobreposição
+ * ------------------------------------------------------------------- */
+
+/* Palco livre: área própria com altura configurável. */
+.cee-hotspots[data-stage-mode="blank"] .cee-hotspots__stage {
+	min-height: var(--cee-hs-stage-height);
+}
+
+/* Sobrepor o conteúdo: o widget vira uma camada que preenche o pai. */
+.cee-hs-mode-overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 5;
+}
+
+.cee-hs-mode-overlay > .elementor-widget-container {
+	height: 100%;
+}
+
+.cee-hotspots[data-stage-mode="overlay"] {
+	height: 100%;
+}
+
+.cee-hotspots[data-stage-mode="overlay"] .cee-hotspots__stage {
+	height: 100%;
+	min-height: var(--cee-hs-stage-height);
+}
+
+/* Guia visual apenas no editor, para localizar o palco vazio. */
+body.elementor-editor-active .cee-hotspots[data-stage-mode="blank"] .cee-hotspots__stage,
+body.elementor-editor-active .cee-hotspots[data-stage-mode="overlay"] .cee-hotspots__stage {
+	outline: 1px dashed rgba(200, 162, 75, 0.6);
+	outline-offset: -1px;
 }
 
 /* ---------------------------------------------------------------------

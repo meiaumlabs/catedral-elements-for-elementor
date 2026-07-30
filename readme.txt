@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.14.0
+Stable tag: 1.15.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,13 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.15.0 =
+* Widget "Pontos Interativos": novo controle "Tipo de palco", permitindo usar os pontos sem imagem base.
+  * "Imagem base (âncora)": comportamento anterior — pontos posicionados sobre a imagem.
+  * "Palco livre (sem imagem)": área transparente com altura configurável (px/vh) e cor de fundo opcional; posicione os pontos por X/Y sem precisar de imagem.
+  * "Sobrepor o conteúdo": o widget vira uma camada sobre o conteúdo atrás dele (usar dentro de um Contêiner com posição Relativa).
+  * Guia visual tracejado no editor para localizar o palco vazio.
 
 = 1.14.0 =
 * Novo widget "Pontos Interativos" (Hotspots): mapeia pontos de informação sobre uma imagem base.
