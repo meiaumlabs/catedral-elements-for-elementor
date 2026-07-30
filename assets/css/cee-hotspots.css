@@ -85,11 +85,27 @@ body.elementor-editor-active .cee-hotspots[data-stage-mode="overlay"] .cee-hotsp
 
 .cee-hotspot {
 	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
+	/* Origem padrão: esquerda/topo. A âncora (data-anchor-*) troca a borda de
+	 * referência e o sinal do translate para manter o ponto centrado. */
+	--cee-hs-tx: -50%;
+	--cee-hs-ty: -50%;
+	left: var(--cee-hs-x, 50%);
+	top: var(--cee-hs-y, 50%);
+	transform: translate(var(--cee-hs-tx), var(--cee-hs-ty));
 	z-index: 4;
 	line-height: normal;
+}
+
+.cee-hotspot[data-anchor-h="right"] {
+	left: auto;
+	right: var(--cee-hs-x, 50%);
+	--cee-hs-tx: 50%;
+}
+
+.cee-hotspot[data-anchor-v="bottom"] {
+	top: auto;
+	bottom: var(--cee-hs-y, 50%);
+	--cee-hs-ty: 50%;
 }
 
 .cee-hotspot.is-open {

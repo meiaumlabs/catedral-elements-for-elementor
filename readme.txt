@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.15.0
+Stable tag: 1.16.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,12 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.16.0 =
+* Widget "Pontos Interativos": âncora de origem por ponto.
+  * Novos controles "Origem horizontal" (a partir da esquerda/direita) e "Origem vertical" (a partir do topo/base).
+  * Os controles de posição passam a ser "Deslocamento horizontal/vertical", medidos a partir da origem escolhida (o ponto permanece centrado).
+  * Retrocompatível: pontos existentes continuam ancorados em esquerda/topo.
 
 = 1.15.0 =
 * Widget "Pontos Interativos": novo controle "Tipo de palco", permitindo usar os pontos sem imagem base.

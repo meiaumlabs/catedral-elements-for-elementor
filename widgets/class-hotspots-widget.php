@@ -171,22 +171,45 @@ class CEE_Hotspots_Widget extends Widget_Base {
 			'dynamic'     => array( 'active' => true ),
 		) );
 
+		$rep->add_control( 'point_anchor_h', array(
+			'label'       => __( 'Origem horizontal', 'catedral-elements' ),
+			'type'        => Controls_Manager::CHOOSE,
+			'default'     => 'left',
+			'options'     => array(
+				'left'  => array( 'title' => __( 'A partir da esquerda', 'catedral-elements' ), 'icon' => 'eicon-h-align-left' ),
+				'right' => array( 'title' => __( 'A partir da direita', 'catedral-elements' ), 'icon' => 'eicon-h-align-right' ),
+			),
+			'toggle'      => false,
+			'description' => __( 'Ponto de partida do deslocamento horizontal.', 'catedral-elements' ),
+		) );
+
+		$rep->add_control( 'point_anchor_v', array(
+			'label'   => __( 'Origem vertical', 'catedral-elements' ),
+			'type'    => Controls_Manager::CHOOSE,
+			'default' => 'top',
+			'options' => array(
+				'top'    => array( 'title' => __( 'A partir do topo', 'catedral-elements' ), 'icon' => 'eicon-v-align-top' ),
+				'bottom' => array( 'title' => __( 'A partir da base', 'catedral-elements' ), 'icon' => 'eicon-v-align-bottom' ),
+			),
+			'toggle'  => false,
+		) );
+
 		$rep->add_responsive_control( 'point_x', array(
-			'label'      => __( 'Posição horizontal', 'catedral-elements' ),
+			'label'      => __( 'Deslocamento horizontal', 'catedral-elements' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => array( '%' ),
 			'range'      => array( '%' => array( 'min' => 0, 'max' => 100 ) ),
 			'default'    => array( 'size' => 50, 'unit' => '%' ),
-			'selectors'  => array( '{{WRAPPER}} {{CURRENT_ITEM}}.cee-hotspot' => 'left: {{SIZE}}{{UNIT}};' ),
+			'selectors'  => array( '{{WRAPPER}} {{CURRENT_ITEM}}.cee-hotspot' => '--cee-hs-x: {{SIZE}}{{UNIT}};' ),
 		) );
 
 		$rep->add_responsive_control( 'point_y', array(
-			'label'      => __( 'Posição vertical', 'catedral-elements' ),
+			'label'      => __( 'Deslocamento vertical', 'catedral-elements' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => array( '%' ),
 			'range'      => array( '%' => array( 'min' => 0, 'max' => 100 ) ),
 			'default'    => array( 'size' => 50, 'unit' => '%' ),
-			'selectors'  => array( '{{WRAPPER}} {{CURRENT_ITEM}}.cee-hotspot' => 'top: {{SIZE}}{{UNIT}};' ),
+			'selectors'  => array( '{{WRAPPER}} {{CURRENT_ITEM}}.cee-hotspot' => '--cee-hs-y: {{SIZE}}{{UNIT}};' ),
 		) );
 
 		$rep->add_control( 'box_placement', array(
@@ -627,6 +650,9 @@ class CEE_Hotspots_Widget extends Widget_Base {
 		$placement = in_array( $p['box_placement'] ?? 'top', array( 'auto', 'top', 'bottom', 'left', 'right' ), true ) ? $p['box_placement'] : 'top';
 		$runtime   = 'auto' === $placement ? 'top' : $placement;
 
+		$anchor_h = 'right' === ( $p['point_anchor_h'] ?? 'left' ) ? 'right' : 'left';
+		$anchor_v = 'bottom' === ( $p['point_anchor_v'] ?? 'top' ) ? 'bottom' : 'top';
+
 		$label = isset( $p['point_label'] ) && '' !== $p['point_label']
 			? $p['point_label']
 			: sprintf( /* translators: %d: número do ponto */ __( 'Ponto %d', 'catedral-elements' ), $i + 1 );
@@ -655,7 +681,9 @@ class CEE_Hotspots_Widget extends Widget_Base {
 		?>
 		<div class="cee-hotspot <?php echo esc_attr( $item_class ); ?>"
 			data-placement="<?php echo esc_attr( $placement ); ?>"
-			data-runtime-placement="<?php echo esc_attr( $runtime ); ?>">
+			data-runtime-placement="<?php echo esc_attr( $runtime ); ?>"
+			data-anchor-h="<?php echo esc_attr( $anchor_h ); ?>"
+			data-anchor-v="<?php echo esc_attr( $anchor_v ); ?>">
 
 			<button type="button"
 				class="cee-hotspot__trigger"
