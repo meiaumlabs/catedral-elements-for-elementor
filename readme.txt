@@ -4,7 +4,7 @@ Tags: elementor, slider, carousel, real estate, fullscreen
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.13.0
+Stable tag: 1.14.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,15 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.14.0 =
+* Novo widget "Pontos Interativos" (Hotspots): mapeia pontos de informação sobre uma imagem base.
+  * Cada ponto é posicionado livremente (X/Y em %, responsivo por dispositivo).
+  * Ícone de acionamento em círculo SVG com preenchimento radial e efeito de pulso — cores do núcleo, borda radial e pulso totalmente personalizáveis.
+  * Clique abre uma caixa de conteúdo no padrão "Image Box" (mídia + título + texto), com abertura acima/abaixo/à esquerda/à direita ou automática (flip e clamp para não estourar a imagem).
+  * Imagem da caixa com recursos de posicionamento completos: encaixe (cover/contain), foco global (object-position) com override por ponto e proporção (natural/1:1/3:2/4:3/16:9/21:9/9:16).
+  * Caixa totalmente customizável: largura, fundo, espaçamento, arredondamento, borda, sombra e tipografia/cor de título e texto. Cor do ponto também pode ser sobrescrita individualmente.
+  * Interação acessível: fecha ao clicar fora, tecla ESC e reposiciona no resize; respeita prefers-reduced-motion.
 
 = 1.13.0 =
 * Novo: controle "Posição do botão" (em Botão CTA) para posicionar o CTA em relação ao título:

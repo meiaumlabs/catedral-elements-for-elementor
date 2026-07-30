@@ -42,5 +42,8 @@ class CEE_Elementor {
 	public static function register_widgets( $widgets_manager ) {
 		require_once CEE_DIR . 'widgets/class-slide-carousel-widget.php';
 		$widgets_manager->register( new \CEE_Slide_Carousel_Widget() );
+
+		require_once CEE_DIR . 'widgets/class-hotspots-widget.php';
+		$widgets_manager->register( new \CEE_Hotspots_Widget() );
 	}
 }
