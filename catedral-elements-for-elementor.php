@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Catedral Elements for Elementor
  * Plugin URI:        https://61labs.com.br/catedral-elements
- * Description:       Addon de widgets premium para o Elementor desenvolvido pela 61 Labs. Widgets: Slide Carrossel com Scroll Horizontal e Pontos Interativos (hotspots) para apresentações imobiliárias de alto padrão.
- * Version:           1.16.0
+ * Description:       Addon de widgets premium para o Elementor desenvolvido pela 61 Labs. Widgets: Slide Carrossel com Scroll Horizontal, Pontos Interativos (hotspots) e Posts em Carrossel. Inclui a biblioteca de ícones Lucide em todo o site e link no bloco/contêiner inteiro.
+ * Version:           1.17.0
  * Requires at least: 5.9
  * Requires PHP:      7.4
  * Author:            61 Labs
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CEE_VERSION', '1.16.0' );
+define( 'CEE_VERSION', '1.17.0' );
 define( 'CEE_FILE', __FILE__ );
 define( 'CEE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CEE_URL', plugin_dir_url( __FILE__ ) );
@@ -47,6 +47,8 @@ $cee_update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdat
 );
 $cee_update_checker->getVcsApi()->enableReleaseAssets();
 
+require_once CEE_DIR . 'includes/class-cee-icons.php';
+require_once CEE_DIR . 'includes/class-cee-link-block.php';
 require_once CEE_DIR . 'includes/class-cee-elementor.php';
 
 /**
@@ -67,6 +69,10 @@ register_deactivation_hook( __FILE__, 'cee_deactivate' );
 
 add_action( 'plugins_loaded', function () {
 	load_plugin_textdomain( 'catedral-elements', false, dirname( CEE_BASENAME ) . '/languages' );
+
+	// Ícones Lucide (aba no seletor de ícones do Elementor) e link no bloco/contêiner.
+	CEE_Icons::init();
+	CEE_Link_Block::init();
 
 	// A integração com o Elementor só inicializa se o Elementor estiver ativo.
 	add_action( 'elementor/init', array( 'CEE_Elementor', 'init' ) );
@@ -102,6 +108,32 @@ add_action( 'wp_enqueue_scripts', function () {
 		CEE_VERSION,
 		true
 	);
+	wp_register_style(
+		'cee-posts-carousel',
+		CEE_URL . 'assets/css/cee-posts-carousel.css',
+		array(),
+		CEE_VERSION
+	);
+	wp_register_script(
+		'cee-posts-carousel',
+		CEE_URL . 'assets/js/cee-posts-carousel.js',
+		array(),
+		CEE_VERSION,
+		true
+	);
+	wp_register_style(
+		'cee-link-block',
+		CEE_URL . 'assets/css/cee-link-block.css',
+		array(),
+		CEE_VERSION
+	);
+	wp_register_script(
+		'cee-link-block',
+		CEE_URL . 'assets/js/cee-link-block.js',
+		array(),
+		CEE_VERSION,
+		true
+	);
 }, 5 );
 
 /**
@@ -126,6 +158,24 @@ add_action( 'elementor/frontend/after_register_scripts', function () {
 			true
 		);
 	}
+	if ( ! wp_script_is( 'cee-posts-carousel', 'registered' ) ) {
+		wp_register_script(
+			'cee-posts-carousel',
+			CEE_URL . 'assets/js/cee-posts-carousel.js',
+			array(),
+			CEE_VERSION,
+			true
+		);
+	}
+	if ( ! wp_script_is( 'cee-link-block', 'registered' ) ) {
+		wp_register_script(
+			'cee-link-block',
+			CEE_URL . 'assets/js/cee-link-block.js',
+			array(),
+			CEE_VERSION,
+			true
+		);
+	}
 } );
 
 add_action( 'elementor/frontend/after_register_styles', function () {
@@ -141,6 +191,22 @@ add_action( 'elementor/frontend/after_register_styles', function () {
 		wp_register_style(
 			'cee-hotspots',
 			CEE_URL . 'assets/css/cee-hotspots.css',
+			array(),
+			CEE_VERSION
+		);
+	}
+	if ( ! wp_style_is( 'cee-posts-carousel', 'registered' ) ) {
+		wp_register_style(
+			'cee-posts-carousel',
+			CEE_URL . 'assets/css/cee-posts-carousel.css',
+			array(),
+			CEE_VERSION
+		);
+	}
+	if ( ! wp_style_is( 'cee-link-block', 'registered' ) ) {
+		wp_register_style(
+			'cee-link-block',
+			CEE_URL . 'assets/css/cee-link-block.css',
 			array(),
 			CEE_VERSION
 		);

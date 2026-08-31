@@ -1,0 +1,5 @@
+/* Catedral Elements — Bloco linkado.
+   Cursor de link em qualquer bloco marcado como clicável. */
+.cee-linked-block {
+	cursor: pointer;
+}

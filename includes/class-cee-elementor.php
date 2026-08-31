@@ -45,5 +45,8 @@ class CEE_Elementor {
 
 		require_once CEE_DIR . 'widgets/class-hotspots-widget.php';
 		$widgets_manager->register( new \CEE_Hotspots_Widget() );
+
+		require_once CEE_DIR . 'widgets/class-posts-carousel-widget.php';
+		$widgets_manager->register( new \CEE_Posts_Carousel_Widget() );
 	}
 }

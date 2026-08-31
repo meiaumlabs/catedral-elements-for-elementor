@@ -43,11 +43,11 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 	}
 
 	public function get_style_depends() {
-		return array( 'cee-slide-carousel' );
+		return array( 'cee-slide-carousel', 'cee-link-block' );
 	}
 
 	public function get_script_depends() {
-		return array( 'cee-slide-carousel' );
+		return array( 'cee-slide-carousel', 'cee-link-block' );
 	}
 
 	/* =====================================================================
@@ -209,6 +209,20 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 			),
 			'placeholder' => 'https://',
 			'dynamic'     => array( 'active' => true ),
+		) );
+
+		$repeater->add_control( 'slide_link', array(
+			'label'         => __( 'Link do slide inteiro', 'catedral-elements' ),
+			'type'          => Controls_Manager::URL,
+			'default'       => array(
+				'url'         => '',
+				'is_external' => false,
+				'nofollow'    => false,
+			),
+			'placeholder'   => 'https://',
+			'show_external' => true,
+			'dynamic'       => array( 'active' => true ),
+			'description'   => __( 'Torna o slide inteiro clicável. O botão e demais links continuam funcionando; arrastar (swipe) não dispara o link.', 'catedral-elements' ),
 		) );
 
 		$this->add_control( 'slides', array(
@@ -1653,10 +1667,34 @@ class CEE_Slide_Carousel_Widget extends Widget_Base {
 		if ( '' !== $btn_text && '' !== $btn_url ) {
 			$btn_markup = '<a class="cee-slide__btn" href="' . esc_url( $btn_url ) . '"' . $btn_attrs . '>' . esc_html( $btn_text ) . '</a>';
 		}
+
+		// Link do slide inteiro (bloco clicável).
+		$slide_link     = isset( $slide['slide_link'] ) ? $slide['slide_link'] : array();
+		$slide_link_url = isset( $slide_link['url'] ) ? trim( $slide_link['url'] ) : '';
+		$linked_class   = '';
+		$linked_attrs   = '';
+		if ( '' !== $slide_link_url ) {
+			$linked_class = ' cee-linked-block';
+			$linked_attrs = ' data-cee-link="' . esc_url( $slide_link_url ) . '"';
+			if ( ! empty( $slide_link['is_external'] ) ) {
+				$linked_attrs .= ' data-cee-link-target="_blank"';
+			}
+			$rel = array();
+			if ( ! empty( $slide_link['is_external'] ) ) {
+				$rel[] = 'noopener';
+				$rel[] = 'noreferrer';
+			}
+			if ( ! empty( $slide_link['nofollow'] ) ) {
+				$rel[] = 'nofollow';
+			}
+			if ( ! empty( $rel ) ) {
+				$linked_attrs .= ' data-cee-link-rel="' . esc_attr( implode( ' ', $rel ) ) . '"';
+			}
+		}
 		?>
-		<div class="cee-slide<?php echo $is_active ? ' cee-slide--active' : ''; ?>"
+		<div class="cee-slide<?php echo $is_active ? ' cee-slide--active' : ''; echo esc_attr( $linked_class ); ?>"
 			data-slide-index="<?php echo esc_attr( $index ); ?>"
-			aria-hidden="<?php echo esc_attr( $is_active ? 'false' : 'true' ); ?>">
+			aria-hidden="<?php echo esc_attr( $is_active ? 'false' : 'true' ); ?>"<?php echo $linked_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- atributos pré-escapados acima. ?>>
 
 			<div class="cee-slide__media">
 				<?php if ( $image_url ) : ?>

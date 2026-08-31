@@ -46,11 +46,11 @@ class CEE_Hotspots_Widget extends Widget_Base {
 	}
 
 	public function get_style_depends() {
-		return array( 'cee-hotspots' );
+		return array( 'cee-hotspots', 'cee-link-block' );
 	}
 
 	public function get_script_depends() {
-		return array( 'cee-hotspots' );
+		return array( 'cee-hotspots', 'cee-link-block' );
 	}
 
 	/* =====================================================================
@@ -146,6 +146,21 @@ class CEE_Hotspots_Widget extends Widget_Base {
 			),
 			'toggle'               => false,
 			'selectors'            => array( '{{WRAPPER}} .cee-hotspots' => 'justify-content: {{VALUE}};' ),
+		) );
+
+		$this->add_control( 'stage_link', array(
+			'label'         => __( 'Link do palco (bloco clicável)', 'catedral-elements' ),
+			'type'          => Controls_Manager::URL,
+			'default'       => array(
+				'url'         => '',
+				'is_external' => false,
+				'nofollow'    => false,
+			),
+			'placeholder'   => 'https://',
+			'show_external' => true,
+			'dynamic'       => array( 'active' => true ),
+			'description'   => __( 'Torna a área do palco clicável. Os pontos interativos continuam abrindo suas caixas normalmente; clicar fora deles leva a este link.', 'catedral-elements' ),
+			'separator'     => 'before',
 		) );
 
 		$this->end_controls_section();
@@ -622,9 +637,33 @@ class CEE_Hotspots_Widget extends Widget_Base {
 		$ratio   = $settings['box_img_ratio'] ?? '16:9';
 		$img_natural = 'padrao' === $ratio ? 'yes' : 'no';
 		$uid     = $this->get_id();
+
+		// Link do palco inteiro (bloco clicável).
+		$stage_link     = isset( $settings['stage_link'] ) ? $settings['stage_link'] : array();
+		$stage_link_url = isset( $stage_link['url'] ) ? trim( $stage_link['url'] ) : '';
+		$stage_class    = '';
+		$stage_attrs    = '';
+		if ( '' !== $stage_link_url ) {
+			$stage_class = ' cee-linked-block';
+			$stage_attrs = ' data-cee-link="' . esc_url( $stage_link_url ) . '"';
+			if ( ! empty( $stage_link['is_external'] ) ) {
+				$stage_attrs .= ' data-cee-link-target="_blank"';
+			}
+			$rel = array();
+			if ( ! empty( $stage_link['is_external'] ) ) {
+				$rel[] = 'noopener';
+				$rel[] = 'noreferrer';
+			}
+			if ( ! empty( $stage_link['nofollow'] ) ) {
+				$rel[] = 'nofollow';
+			}
+			if ( ! empty( $rel ) ) {
+				$stage_attrs .= ' data-cee-link-rel="' . esc_attr( implode( ' ', $rel ) ) . '"';
+			}
+		}
 		?>
 		<div class="cee-hotspots" data-pulse="<?php echo esc_attr( $pulse ); ?>" data-img-natural="<?php echo esc_attr( $img_natural ); ?>" data-stage-mode="<?php echo esc_attr( $stage_mode ); ?>">
-			<div class="cee-hotspots__stage">
+			<div class="cee-hotspots__stage<?php echo esc_attr( $stage_class ); ?>"<?php echo $stage_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- atributos pré-escapados acima. ?>>
 				<?php if ( $is_image && $base_url ) : ?>
 					<img class="cee-hotspots__base" src="<?php echo esc_url( $base_url ); ?>" alt="<?php echo esc_attr( $base_alt ); ?>" loading="lazy" decoding="async" />
 				<?php endif; ?>

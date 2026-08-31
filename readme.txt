@@ -1,10 +1,10 @@
 === Catedral Elements for Elementor ===
 Contributors: 61labs
-Tags: elementor, slider, carousel, real estate, fullscreen
+Tags: elementor, slider, carousel, posts, lucide icons
 Requires at least: 5.9
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.16.0
+Stable tag: 1.17.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,18 @@ Recursos:
 4. No editor do Elementor, procure a categoria "Catedral Elements" e arraste o widget "Slide Carrossel".
 
 == Changelog ==
+
+= 1.17.0 =
+* Novo: biblioteca de ícones **Lucide** (~2.000 ícones) integrada ao seletor de ícones nativo do Elementor, disponível em TODO o site (qualquer widget com controle de ícone — botão, ícone, lista de ícones, etc.), como uma aba "Lucide".
+* Novo widget **"Posts em Carrossel"**: consulta dinâmica de posts/CPT (tipo de post, taxonomia, ordenação, quantidade) exibida como carrossel, com:
+  * Setas de navegação com posição (interna/externa e deslocamento X/Y) responsiva por dispositivo e estilo completo nos estados Normal, Hover e Ativo (clicado).
+  * Ícones das setas selecionáveis (inclui Lucide).
+  * Card com imagem (proporção/encaixe), título, meta (data/autor/termos), resumo e botão; card inteiro clicável para o post.
+  * Slides por dispositivo, espaçamento, autoplay, loop e swipe touch.
+* Novo: **link no bloco inteiro**.
+  * Contêineres do Elementor ganham "Linkar contêiner inteiro" (na aba Layout), tornando todo o bloco clicável sem quebrar links/botões internos.
+  * Slide Carrossel: "Link do slide inteiro" por slide (arrastar/swipe não dispara o link).
+  * Pontos Interativos: "Link do palco" — a área da imagem base fica clicável, com os pontos continuando a abrir suas caixas.
 
 = 1.16.0 =
 * Widget "Pontos Interativos": âncora de origem por ponto.

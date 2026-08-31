@@ -1,0 +1,340 @@
+/**
+ * Catedral Elements — Posts em Carrossel.
+ * Carrossel horizontal de cards de post, sem dependências externas.
+ * Todos os valores ajustáveis vêm de CSS custom properties (--cee-pc-*)
+ * sobrescritas pelo Elementor via selectors (inclusive por dispositivo).
+ */
+
+.cee-posts-carousel {
+	/* Tokens base (fallbacks — o Elementor sobrescreve via selectors). */
+	--cee-pc-per-view: 3;
+	--cee-pc-gap: 24px;
+	--cee-pc-speed: 500ms;
+	--cee-pc-card-gap: 12px;
+
+	--cee-pc-ratio: 4 / 3;
+	--cee-pc-fit: cover;
+
+	--cee-pc-arrow-size: 44px;
+	--cee-pc-arrow-icon-size: 18px;
+	--cee-pc-arrow-x: 12px;
+	--cee-pc-arrow-y: 0px;
+	/* Definidos pelo control "Posição das setas" (dentro / fora). */
+	--cee-pc-arrow-gutter: 0px;
+	--cee-pc-arrow-inset: var(--cee-pc-arrow-x, 12px);
+
+	--cee-pc-dot-size: 8px;
+	--cee-pc-dot-color: rgba(17, 17, 17, 0.25);
+	--cee-pc-dot-color-active: #111111;
+
+	position: relative;
+	width: 100%;
+	/* No modo "fora", a faixa lateral abre espaço para as setas sem que elas
+	   estourem a largura da página. No modo "dentro", a faixa é zero. */
+	padding-left: var(--cee-pc-arrow-gutter, 0px);
+	padding-right: var(--cee-pc-arrow-gutter, 0px);
+}
+
+.cee-posts-carousel *,
+.cee-posts-carousel *::before,
+.cee-posts-carousel *::after {
+	box-sizing: border-box;
+}
+
+/* Aviso exibido apenas no editor quando a consulta não retorna posts. */
+.cee-posts-carousel--empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 140px;
+	padding: 32px;
+	border: 1px dashed rgba(17, 17, 17, 0.25);
+	border-radius: 6px;
+	color: rgba(17, 17, 17, 0.6);
+	text-align: center;
+}
+
+/* ---------------------------------------------------------------------
+ * Viewport + Track
+ * ------------------------------------------------------------------- */
+
+.cee-pc__viewport {
+	overflow: hidden;
+	width: 100%;
+}
+
+.cee-pc__track {
+	display: flex;
+	gap: var(--cee-pc-gap, 24px);
+	will-change: transform;
+	transition: transform var(--cee-pc-speed, 500ms) cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Enquanto o dedo arrasta, o track acompanha o gesto sem animação. */
+.cee-pc__track.is-dragging {
+	transition: none;
+}
+
+/* ---------------------------------------------------------------------
+ * Card
+ * ------------------------------------------------------------------- */
+
+.cee-pc__card {
+	/* Largura calculada para caber exatamente N cards visíveis, descontando
+	   os (N - 1) intervalos entre eles. */
+	flex: 0 0 calc((100% - (var(--cee-pc-gap, 24px) * (var(--cee-pc-per-view, 3) - 1))) / var(--cee-pc-per-view, 3));
+	max-width: calc((100% - (var(--cee-pc-gap, 24px) * (var(--cee-pc-per-view, 3) - 1))) / var(--cee-pc-per-view, 3));
+	display: flex;
+	flex-direction: column;
+	gap: var(--cee-pc-card-gap, 12px);
+	overflow: hidden;
+	transition:
+		transform 300ms cubic-bezier(0.76, 0, 0.24, 1),
+		background-color 300ms ease,
+		box-shadow 300ms ease,
+		border-color 300ms ease;
+}
+
+/* O card em modo "clicável" é um <a>: não deve parecer um link de texto. */
+a.cee-pc__card {
+	text-decoration: none;
+	color: inherit;
+}
+
+a.cee-pc__card:hover,
+a.cee-pc__card:focus,
+a.cee-pc__card:focus-visible {
+	text-decoration: none;
+	color: inherit;
+}
+
+a.cee-pc__card:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------
+ * Imagem
+ * ------------------------------------------------------------------- */
+
+.cee-pc__media {
+	position: relative;
+	overflow: hidden;
+	line-height: 0;
+}
+
+.cee-pc__media img,
+.cee-pc__img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: var(--cee-pc-ratio, 4 / 3);
+	object-fit: var(--cee-pc-fit, cover);
+	object-position: center center;
+}
+
+/* A proporção "natural" define --cee-pc-ratio como `auto`, e nesse caso a
+   altura passa a ser a do próprio arquivo — sem precisar de regra extra. */
+
+/* ---------------------------------------------------------------------
+ * Conteúdo do card
+ * ------------------------------------------------------------------- */
+
+.cee-pc__body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--cee-pc-card-gap, 12px);
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.cee-pc__meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	margin: 0;
+}
+
+.cee-pc__meta a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.cee-pc__meta a:hover,
+.cee-pc__meta a:focus-visible {
+	text-decoration: underline;
+}
+
+.cee-pc__title {
+	margin: 0;
+	overflow-wrap: anywhere;
+}
+
+.cee-pc__title a {
+	color: inherit;
+	text-decoration: none;
+	transition: color 200ms ease;
+}
+
+.cee-pc__title a:hover,
+.cee-pc__title a:focus-visible {
+	text-decoration: none;
+}
+
+.cee-pc__excerpt {
+	margin: 0;
+}
+
+/* Botão — <a> ou <span>, conforme o modo de link do card. */
+.cee-pc__btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	align-self: flex-start;
+	margin-top: auto;
+	text-decoration: none;
+	cursor: pointer;
+	transition:
+		color 250ms ease,
+		background-color 250ms ease,
+		border-color 250ms ease;
+}
+
+span.cee-pc__btn {
+	/* Rótulo visual dentro de um card já clicável: o clique é do card. */
+	cursor: inherit;
+}
+
+.cee-pc__btn:hover,
+.cee-pc__btn:focus-visible {
+	text-decoration: none;
+}
+
+/* ---------------------------------------------------------------------
+ * Setas de navegação
+ * ------------------------------------------------------------------- */
+
+.cee-pc__arrow {
+	position: absolute;
+	/* O centro vertical vale para a área dos cards; o offset ajusta a partir daí. */
+	top: calc(50% + var(--cee-pc-arrow-y, 0px));
+	transform: translateY(-50%);
+	z-index: 3;
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--cee-pc-arrow-size, 44px);
+	height: var(--cee-pc-arrow-size, 44px);
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	cursor: pointer;
+	line-height: 1;
+	appearance: none;
+	-webkit-appearance: none;
+
+	transition:
+		color 250ms ease,
+		background-color 250ms ease,
+		border-color 250ms ease,
+		opacity 250ms ease,
+		transform 250ms ease;
+}
+
+.cee-pc__arrow--prev {
+	left: var(--cee-pc-arrow-inset, 12px);
+}
+
+.cee-pc__arrow--next {
+	right: var(--cee-pc-arrow-inset, 12px);
+}
+
+.cee-pc__arrow i,
+.cee-pc__arrow svg {
+	display: block;
+	width: var(--cee-pc-arrow-icon-size, 18px);
+	height: var(--cee-pc-arrow-icon-size, 18px);
+	font-size: var(--cee-pc-arrow-icon-size, 18px);
+	line-height: 1;
+	fill: currentColor;
+}
+
+/* Ícone de fonte (eicon / Font Awesome): a caixa é definida pelo font-size. */
+.cee-pc__arrow i {
+	width: auto;
+	height: auto;
+}
+
+.cee-pc__arrow:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+/* Extremos com loop desligado: seta inerte, mas ainda visível. */
+.cee-pc__arrow[disabled],
+.cee-pc__arrow[aria-disabled="true"] {
+	opacity: 0.35;
+	cursor: default;
+	pointer-events: none;
+}
+
+/* Um único "passo" possível (cabem todos os cards): o JS esconde as setas. */
+.cee-pc__arrow[hidden] {
+	display: none;
+}
+
+/* ---------------------------------------------------------------------
+ * Paginação (bolinhas)
+ * ------------------------------------------------------------------- */
+
+.cee-pc__dots {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 24px;
+}
+
+.cee-pc__dot {
+	width: var(--cee-pc-dot-size, 8px);
+	height: var(--cee-pc-dot-size, 8px);
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background-color: var(--cee-pc-dot-color, rgba(17, 17, 17, 0.25));
+	cursor: pointer;
+	appearance: none;
+	-webkit-appearance: none;
+	transition: background-color 250ms ease, transform 250ms ease;
+}
+
+.cee-pc__dot--active {
+	background-color: var(--cee-pc-dot-color-active, #111111);
+	transform: scale(1.2);
+}
+
+.cee-pc__dot:focus-visible {
+	outline: 2px solid var(--cee-pc-dot-color-active, #111111);
+	outline-offset: 3px;
+}
+
+.cee-pc__dot[hidden] {
+	display: none;
+}
+
+/* ---------------------------------------------------------------------
+ * Acessibilidade / preferências do usuário
+ * ------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+	.cee-pc__track,
+	.cee-pc__card,
+	.cee-pc__arrow,
+	.cee-pc__dot,
+	.cee-pc__btn {
+		transition-duration: 1ms !important;
+	}
+}
